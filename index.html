@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Little Booth by Bianca Githa — a vintage browser photobooth.">
+<title>Little Booth — by Bianca Githa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#d9d0c3;--paper:#ece5da;--paper2:#d7cdbf;--ink:#28241f;--muted:#6e665d;
+  --line:rgba(43,37,31,.18);--dark:#292721;--cream:#f3ede4;--shadow:0 28px 70px rgba(52,42,34,.18);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:
+radial-gradient(circle at 10% 10%,rgba(255,255,255,.35),transparent 25%),
+linear-gradient(135deg,#ddd5ca,#cfc4b6);color:var(--ink);font-family:Manrope,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.27;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
+button,select,input{font:inherit}.hidden{display:none!important}
+header{position:fixed;inset:0 0 auto;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(18px,4vw,56px);pointer-events:none}
+.logo{pointer-events:auto;font-family:"Instrument Serif",serif;font-size:1.55rem}.logo small{font:400 .56rem "DM Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-left:8px}
+.icon{pointer-events:auto;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:rgba(241,234,224,.55);backdrop-filter:blur(14px);cursor:pointer}
+.screen{min-height:100vh}
+.hero{position:relative;display:grid;place-items:center;padding:105px 22px 52px;text-align:center;overflow:hidden}
+.hero:after{content:"";position:absolute;width:460px;height:460px;border-radius:50%;right:-100px;bottom:-140px;background:rgba(108,85,65,.11);filter:blur(15px)}
+.kicker{font:500 .66rem "DM Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+h1{max-width:930px;margin:20px auto 20px;font:400 clamp(4.2rem,12vw,10rem)/.77 "Instrument Serif",serif;letter-spacing:-.055em}
+h1 em{display:block;font-weight:400}
+.lead{max-width:470px;margin:0 auto;color:var(--muted);font-size:.9rem;line-height:1.8}
+.btn{border:0;border-radius:999px;padding:14px 22px;cursor:pointer;transition:.25s}
+.btn.primary{background:var(--dark);color:var(--cream);box-shadow:0 16px 30px rgba(45,37,31,.22)}
+.btn.ghost{border:1px solid var(--line);background:rgba(242,236,227,.55);color:var(--ink)}
+.btn:hover{transform:translateY(-3px)}
+.hero .btn{margin-top:32px;min-width:165px}
+.note{margin-top:18px;font:400 .69rem "DM Mono",monospace;color:var(--muted)}
+.polaroid{position:absolute;width:120px;padding:8px 8px 26px;background:#eee7dc;box-shadow:0 20px 38px rgba(53,42,34,.18);transform:rotate(-7deg);left:7%;top:22%}
+.polaroid:before{content:"";display:block;aspect-ratio:4/5;background:linear-gradient(135deg,#b9afa2,#5a5149);filter:sepia(.6) contrast(.85)}
+.polaroid.two{left:auto;right:8%;top:auto;bottom:14%;transform:rotate(8deg)}
+.app{padding:98px clamp(12px,3vw,44px) 38px}
+.layout{max-width:1450px;margin:auto;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.58fr);gap:28px}
+.card{border:1px solid var(--line);background:rgba(237,229,218,.55);backdrop-filter:blur(18px);box-shadow:var(--shadow);border-radius:28px}
+.camera-card{padding:16px}.topline{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:8px 8px 16px}
+.title{font:400 2rem "Instrument Serif",serif}.status{font:500 .62rem "DM Mono",monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#91877b;margin-right:8px}.dot.on{background:#b35446;box-shadow:0 0 0 5px rgba(179,84,70,.12)}
+.frame{position:relative;overflow:hidden;border-radius:20px;background:#161513;aspect-ratio:4/3;isolation:isolate}
+video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.placeholder{position:absolute;inset:0;z-index:4;display:grid;place-items:center;text-align:center;color:#eee4d8;background:#1b1916;padding:30px}
+.placeholder h3{font:400 1.7rem "Instrument Serif",serif;margin:0 0 8px}.placeholder p{max-width:330px;font-size:.75rem;line-height:1.7;color:#a79d92}
+.fx,.grain,.scratches,.vig,.leak{position:absolute;inset:0;pointer-events:none;z-index:2}
+.grain{opacity:.11;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");animation:grain .18s steps(2) infinite}
+.scratches{opacity:.23;background:linear-gradient(90deg,transparent 12%,rgba(255,255,255,.12) 12.12%,transparent 12.25%,transparent 74%,rgba(0,0,0,.12) 74.1%,transparent 74.25%);animation:scratch 4s linear infinite}
+.vig{background:radial-gradient(ellipse,transparent 45%,rgba(17,12,8,.38) 100%);mix-blend-mode:multiply}
+.leak{opacity:0;filter:blur(22px);mix-blend-mode:screen;background:radial-gradient(circle at 0 45%,rgba(255,118,42,.42),transparent 42%);transition:.3s}.leak.on{opacity:.24}
+.flash{position:absolute;inset:0;z-index:10;background:white;opacity:0;pointer-events:none}.flash.go{animation:flash .46s}
+.count{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(0,0,0,.08)}.count b{font:400 clamp(7rem,18vw,13rem) "Instrument Serif",serif;color:white;text-shadow:0 12px 30px rgba(0,0,0,.3);animation:pop .9s}
+.progress{position:absolute;z-index:8;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px}.progress i{width:7px;height:7px;border:1px solid white;border-radius:50%}.progress i.done{background:white}
+.controls{display:flex;justify-content:center;align-items:center;gap:16px;padding:18px 4px 2px;flex-wrap:wrap}
+.shutter{width:76px;height:76px;border-radius:50%;border:1px solid var(--line);background:rgba(245,238,229,.75);box-shadow:inset 0 0 0 5px rgba(255,255,255,.35),0 12px 24px rgba(48,38,31,.18);cursor:pointer}
+.shutter:before{content:"";display:block;width:52px;height:52px;border-radius:50%;background:#302c27;margin:auto}
+.hint{width:100%;text-align:center;color:var(--muted);font:400 .72rem "DM Mono",monospace}
+.settings{padding:24px;position:sticky;top:92px}.settings h2{font:400 1.9rem "Instrument Serif",serif;margin:4px 0 22px}.group{padding:18px 0;border-top:1px solid var(--line)}.group:first-of-type{border:0;padding-top:0}
+.label{display:block;margin-bottom:11px;font:500 .62rem "DM Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.filter{border:1px solid var(--line);border-radius:12px;padding:12px;background:transparent;text-align:left;cursor:pointer;color:var(--ink)}
+.filter.active{background:#302c27;color:#f2ebe1}.filter strong{display:block;font:400 1rem "Instrument Serif",serif}.filter span{display:block;margin-top:2px;font-size:.55rem;opacity:.62;line-height:1.4}
+.segment{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.segment button{padding:10px;border:1px solid var(--line);background:transparent;border-radius:10px;cursor:pointer}.segment button.active{background:#302c27;color:#f2ebe1}
+select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:rgba(245,239,230,.55);color:var(--ink)}
+.toggle{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:.76rem}.toggle input{accent-color:#302c27}
+.overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(27,23,19,.5);backdrop-filter:blur(16px);padding:20px}
+.devcard{width:min(420px,100%);padding:42px 28px;text-align:center;background:var(--paper);border-radius:25px;box-shadow:var(--shadow)}
+.devcard h2{font:italic 400 2.2rem "Instrument Serif",serif;margin:12px}.devcard p{font-size:.74rem;color:var(--muted)}
+.bar{height:3px;background:#cfc3b4;border-radius:99px;overflow:hidden;margin:25px auto 0;max-width:270px}.bar i{display:block;height:100%;width:0;background:#302c27;animation:develop 4s forwards}
+.result{position:fixed;inset:0;z-index:90;overflow:auto;background:var(--bg);padding:90px 20px 45px}
+.resultin{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr .7fr;gap:55px;align-items:center;min-height:calc(100vh - 135px)}
+.printer{min-height:650px;position:relative;display:flex;justify-content:center;padding-top:62px}.machine{position:absolute;top:0;width:min(450px,92%);height:105px;border-radius:23px;background:#bbb0a2;border:1px solid var(--line);box-shadow:var(--shadow)}.machine:after{content:"";position:absolute;left:11%;right:11%;bottom:14px;height:14px;border-radius:4px;background:#1c1916}.machine span{position:absolute;top:20px;left:25px;font:400 .68rem "DM Mono",monospace;color:#61594f}
+#strip{max-height:680px;max-width:92%;filter:drop-shadow(0 25px 28px rgba(45,34,27,.27));transform-origin:top center}.printing{animation:print 2.5s forwards}
+.resultcopy h2{font:italic 400 clamp(3.6rem,7vw,6rem)/.86 "Instrument Serif",serif;margin:0 0 18px}.resultcopy p{max-width:390px;color:var(--muted);font-size:.8rem;line-height:1.8}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.saved{margin-top:16px;font:italic 400 1rem "Instrument Serif",serif;opacity:0;transition:.3s}.saved.on{opacity:1}
+.toast{position:fixed;right:20px;bottom:20px;z-index:120;padding:13px 16px;border-radius:12px;background:#eee6dc;box-shadow:var(--shadow);font-size:.72rem;opacity:0;transform:translateY(12px);transition:.3s}.toast.on{opacity:1;transform:none}
+#camera.filter-grd{filter:contrast(.84) brightness(1.04) saturate(.76) sepia(.09) hue-rotate(-4deg)}
+#camera.filter-grd-mono{filter:grayscale(1) sepia(.18) contrast(.87) brightness(1.06)}
+#camera.filter-grd-night{filter:contrast(.82) brightness(.96) saturate(.78) sepia(.11) hue-rotate(-5deg)}
+#camera.filter-grd-flash{filter:contrast(.86) brightness(1.11) saturate(.81) sepia(.08) hue-rotate(-3deg)}
+#camera.filter-diary{filter:sepia(.12) saturate(.74) contrast(.82) brightness(1.06) hue-rotate(-9deg)}
+#camera.filter-soft-film{filter:sepia(.12) saturate(.72) contrast(.80) brightness(1.08)}
+@keyframes grain{0%{transform:translate(0)}25%{transform:translate(-2%,1%)}50%{transform:translate(1%,-2%)}75%{transform:translate(2%,2%)}100%{transform:translate(-1%,-1%)}}
+@keyframes scratch{to{background-position:180% 0}}
+@keyframes flash{15%{opacity:.95}100%{opacity:0}}
+@keyframes pop{0%{opacity:0;transform:scale(1.4);filter:blur(9px)}25%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:scale(.8)}}
+@keyframes develop{to{width:100%}}
+@keyframes print{0%{opacity:0;transform:translateY(-420px)}12%{opacity:1}80%{transform:translateY(0)}100%{transform:rotate(-.5deg)}}
+@media(max-width:950px){.layout,.resultin{grid-template-columns:1fr}.settings{position:static}.resultcopy{text-align:center}.resultcopy p{margin:auto}.actions{justify-content:center}}
+@media(max-width:620px){.polaroid{opacity:.35}.frame{aspect-ratio:3/4}.filters{grid-template-columns:1fr}.app{padding-inline:9px}.camera-card{border-radius:21px}.printer{min-height:580px}#strip{max-height:570px}.logo small{display:none}}
+</style>
+</head>
+<body>
+<header><div class="logo">little booth.<small>by Bianca Githa</small></div><button class="icon" id="theme">◐</button></header>
+
+<section class="screen hero" id="hero">
+  <div class="polaroid"></div><div class="polaroid two"></div>
+  <div>
+    <div class="kicker">browser photo booth</div>
+    <h1>take the photo.<em>keep the feeling.</em></h1>
+    <p class="lead">A small photo booth for warm compact-camera color, soft flash, and slightly imperfect pictures.</p>
+    <button class="btn primary" id="enter">enter booth</button>
+    <div class="note">made by Bianca Githa</div>
+  </div>
+</section>
+
+<section class="screen app hidden" id="app">
+<div class="layout">
+  <div class="card camera-card">
+    <div class="topline"><div><div class="kicker">camera</div><div class="title">ready when you are.</div></div><div class="status"><span class="dot" id="dot"></span><span id="status">camera off</span></div></div>
+    <div class="frame">
+      <video id="camera" autoplay playsinline muted></video>
+      <div class="placeholder" id="placeholder"><div><h3>camera access needed</h3><p>Allow camera access to begin. Everything stays on this device.</p></div></div>
+      <div class="fx"></div><div class="grain"></div><div class="scratches"></div><div class="vig"></div><div class="leak" id="leak"></div>
+      <div class="progress" id="progress"></div>
+      <div class="count hidden" id="count"><b id="countNum">3</b></div>
+      <div class="flash" id="flash"></div>
+    </div>
+    <div class="controls">
+      <button class="btn ghost" id="flip" disabled>flip</button>
+      <button class="shutter" id="shoot" disabled aria-label="Take photos"></button>
+      <button class="btn ghost" id="reset">reset</button>
+      <div class="hint" id="hint">allow camera access</div>
+    </div>
+  </div>
+
+  <aside class="card settings">
+    <div class="kicker">settings</div><h2>choose your camera.</h2>
+    <div class="group">
+      <label class="label">Camera look</label>
+      <div class="filters">
+        <button class="filter active" data-filter="grd"><strong>GRD Classic</strong><span>warm, flat, muted compact color</span></button>
+        <button class="filter" data-filter="grd-night"><strong>GRD Night</strong><span>warm lamps, lifted dark background</span></button>
+        <button class="filter" data-filter="grd-flash"><strong>GRD Flash</strong><span>creamy flash and softer highlights</span></button>
+        <button class="filter" data-filter="grd-mono"><strong>GRD B&W</strong><span>warm monochrome, matte blacks</span></button>
+        <button class="filter" data-filter="diary"><strong>Diary</strong><span>faded green and low contrast</span></button>
+        <button class="filter" data-filter="soft-film"><strong>Soft Film</strong><span>cream tone and gentle bloom</span></button>
+      </div>
+    </div>
+    <div class="group"><label class="label">Frames</label><div class="segment"><button data-count="2">2</button><button data-count="3" class="active">3</button><button data-count="4">4</button><button data-count="6">6</button></div></div>
+    <div class="group"><label class="label">Strip note</label><select id="template">
+      <option value="classic">little booth</option><option value="birthday">birthday roll</option><option value="date">our little day</option><option value="cafe">coffee afternoon</option><option value="summer">summer roll</option>
+    </select></div>
+    <div class="group">
+      <label class="toggle"><span>date stamp</span><input id="date" type="checkbox" checked></label>
+      <label class="toggle"><span>random light leak</span><input id="leakToggle" type="checkbox" checked></label>
+      <label class="toggle"><span>camera sound</span><input id="sound" type="checkbox" checked></label>
+    </div>
+  </aside>
+</div>
+</section>
+
+<section class="overlay hidden" id="develop"><div class="devcard"><div class="kicker">film lab</div><h2>developing...</h2><p>your strip will be ready in a moment.</p><div class="bar"><i></i></div></div></section>
+
+<section class="result hidden" id="result"><div class="resultin">
+  <div class="printer"><div class="machine"><span>LITTLE BOOTH / PRINT 01</span></div><img id="strip" alt="Finished photo strip"></div>
+  <div class="resultcopy"><div class="kicker">finished roll</div><h2>your strip<br>is ready.</h2><p>Save it, send it, or go back for another round.</p>
+  <div class="actions"><button class="btn primary" id="save">save strip</button><button class="btn ghost" id="again">take another</button><button class="btn ghost" id="home">home</button></div>
+  <div class="saved" id="saved">saved successfully ♡</div></div>
+</div></section>
+
+<canvas id="canvas" class="hidden"></canvas><div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const el={hero:$("#hero"),app:$("#app"),enter:$("#enter"),camera:$("#camera"),placeholder:$("#placeholder"),dot:$("#dot"),status:$("#status"),shoot:$("#shoot"),flip:$("#flip"),reset:$("#reset"),hint:$("#hint"),count:$("#count"),countNum:$("#countNum"),flash:$("#flash"),progress:$("#progress"),leak:$("#leak"),develop:$("#develop"),result:$("#result"),strip:$("#strip"),canvas:$("#canvas"),save:$("#save"),again:$("#again"),home:$("#home"),saved:$("#saved"),toast:$("#toast"),template:$("#template"),date:$("#date"),leakToggle:$("#leakToggle"),sound:$("#sound")};
+const state={stream:null,facing:"user",ready:false,busy:false,filter:"grd",count:3,photos:[],url:"",audio:null};
+const looks={
+grd:{
+  css:"filter-grd",
+  filter:"contrast(84%) brightness(104%) saturate(76%) sepia(9%) hue-rotate(-4deg)",
+  mode:"classic",
+  grain:.022,
+  vignette:.075,
+  bloom:.075,
+  warmth:.055,
+  fade:.105,
+  highlightRoll:.20,
+  shadowLift:.16,
+  saturation:.82,
+  clarity:.94
+},
+"grd-night":{
+  css:"filter-grd-night",
+  filter:"contrast(82%) brightness(96%) saturate(78%) sepia(11%) hue-rotate(-5deg)",
+  mode:"night",
+  grain:.028,
+  vignette:.12,
+  bloom:.09,
+  warmth:.075,
+  fade:.12,
+  highlightRoll:.24,
+  shadowLift:.20,
+  saturation:.84,
+  clarity:.93
+},
+"grd-flash":{
+  css:"filter-grd-flash",
+  filter:"contrast(86%) brightness(111%) saturate(81%) sepia(8%) hue-rotate(-3deg)",
+  mode:"flash",
+  grain:.018,
+  vignette:.065,
+  bloom:.14,
+  warmth:.048,
+  fade:.085,
+  highlightRoll:.30,
+  shadowLift:.10,
+  saturation:.86,
+  clarity:.92
+},
+"grd-mono":{
+  css:"filter-grd-mono",
+  filter:"grayscale(100%) sepia(18%) contrast(87%) brightness(106%)",
+  mode:"mono",
+  grain:.032,
+  vignette:.09,
+  bloom:.055,
+  warmth:.03,
+  fade:.12,
+  highlightRoll:.22,
+  shadowLift:.18,
+  saturation:0,
+  clarity:.95
+},
+diary:{
+  css:"filter-diary",
+  filter:"sepia(12%) saturate(74%) contrast(82%) brightness(106%) hue-rotate(-9deg)",
+  mode:"diary",
+  grain:.035,
+  vignette:.095,
+  bloom:.065,
+  warmth:.025,
+  fade:.14,
+  highlightRoll:.18,
+  shadowLift:.18,
+  saturation:.76,
+  clarity:.92
+},
+"soft-film":{
+  css:"filter-soft-film",
+  filter:"sepia(12%) saturate(72%) contrast(80%) brightness(108%)",
+  mode:"soft",
+  grain:.025,
+  vignette:.06,
+  bloom:.13,
+  warmth:.07,
+  fade:.15,
+  highlightRoll:.28,
+  shadowLift:.14,
+  saturation:.79,
+  clarity:.90
+}
+};
+const templates={classic:["18","little booth","by Bianca Githa"],birthday:["22","birthday roll","another year of you"],date:["02","our little day","just us"],cafe:["11","coffee afternoon","slow hours"],summer:["07","summer roll","warm days"]};
+
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+function toast(msg){el.toast.textContent=msg;el.toast.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.toast.classList.remove("on"),3500)}
+function renderProgress(done=0){el.progress.innerHTML="";for(let i=0;i<state.count;i++){const d=document.createElement("i");if(i<done)d.classList.add("done");el.progress.appendChild(d)}}
+function lock(v){state.busy=v;el.shoot.disabled=v||!state.ready;el.flip.disabled=v||!state.ready;$$(".filter,.segment button").forEach(b=>b.disabled=v)}
+function setLook(name){if(state.busy)return;state.filter=name;$$(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===name));el.camera.className=looks[name].css;randomLeak()}
+function randomLeak(){el.leak.classList.toggle("on",el.leakToggle.checked&&Math.random()>.45)}
+async function startCamera(){stopCamera();try{state.stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1080}}});el.camera.srcObject=state.stream;await el.camera.play();state.ready=true;el.placeholder.classList.add("hidden");el.shoot.disabled=false;el.flip.disabled=false;el.dot.classList.add("on");el.status.textContent="camera ready";el.hint.textContent=`ready for ${state.count} frames`}catch(e){state.ready=false;el.status.textContent="permission needed";toast("Allow camera access and open this page with Live Server or HTTPS.")}}
+function stopCamera(){if(state.stream)state.stream.getTracks().forEach(t=>t.stop());state.stream=null;state.ready=false}
+async function countdown(){el.count.classList.remove("hidden");for(const n of [3,2,1]){el.countNum.textContent=n;el.countNum.style.animation="none";void el.countNum.offsetWidth;el.countNum.style.animation="pop .9s";beep(n===1?760:560,.08,.045);await wait(900)}el.count.classList.add("hidden")}
+function flash(){el.flash.classList.remove("go");void el.flash.offsetWidth;el.flash.classList.add("go");shutterSound()}
+function cropInfo(v){const r=4/3,sw=v.videoWidth,sh=v.videoHeight;let cw,ch,cx,cy;if(sw/sh>r){ch=sh;cw=ch*r;cx=(sw-cw)/2;cy=0}else{cw=sw;ch=cw/r;cx=0;cy=(sh-ch)/2}return{cw,ch,cx,cy}}
+function capture(){const v=el.camera,{cw,ch,cx,cy}=cropInfo(v),c=document.createElement("canvas"),x=c.getContext("2d",{alpha:false});c.width=1400;c.height=1050;x.save();if(state.facing==="user"){x.translate(c.width,0);x.scale(-1,1)}x.filter=looks[state.filter].filter;x.drawImage(v,cx,cy,cw,ch,0,0,c.width,c.height);x.restore();effects(x,c.width,c.height,looks[state.filter]);return c.toDataURL("image/jpeg",.96)}
+function effects(x,w,h,o){
+  const img=x.getImageData(0,0,w,h);
+  const p=img.data;
+  const out=new Uint8ClampedArray(p.length);
+
+  const clamp=v=>Math.max(0,Math.min(1,v));
+  const smoothstep=(a,b,v)=>{
+    const t=clamp((v-a)/(b-a));
+    return t*t*(3-2*t);
+  };
+
+  // Soft local averaging pass. This lowers digital harshness without visible blur.
+  const sample=(xx,yy,c)=>{
+    xx=Math.max(0,Math.min(w-1,xx));
+    yy=Math.max(0,Math.min(h-1,yy));
+    return p[(yy*w+xx)*4+c]/255;
+  };
+
+  for(let y=0;y<h;y++){
+    for(let xx=0;xx<w;xx++){
+      const i=(y*w+xx)*4;
+
+      let r=p[i]/255;
+      let g=p[i+1]/255;
+      let b=p[i+2]/255;
+
+      const avgR=(sample(xx-1,y,0)+sample(xx+1,y,0)+sample(xx,y-1,0)+sample(xx,y+1,0)+r*4)/8;
+      const avgG=(sample(xx-1,y,1)+sample(xx+1,y,1)+sample(xx,y-1,1)+sample(xx,y+1,1)+g*4)/8;
+      const avgB=(sample(xx-1,y,2)+sample(xx+1,y,2)+sample(xx,y-1,2)+sample(xx,y+1,2)+b*4)/8;
+
+      r=r*o.clarity+avgR*(1-o.clarity);
+      g=g*o.clarity+avgG*(1-o.clarity);
+      b=b*o.clarity+avgB*(1-o.clarity);
+
+      let lum=.2126*r+.7152*g+.0722*b;
+
+      // Gentle global desaturation while keeping skin/orange drinks alive.
+      const sat=o.saturation;
+      r=lum+(r-lum)*sat;
+      g=lum+(g-lum)*sat;
+      b=lum+(b-lum)*sat;
+
+      // Lift dark tones, flatten mids, and roll bright highlights smoothly.
+      const lift=o.shadowLift*(1-smoothstep(.10,.52,lum));
+      r+=lift*.16;
+      g+=lift*.17;
+      b+=lift*.18;
+
+      const roll=smoothstep(.58,1,lum)*o.highlightRoll;
+      r-=roll*(r-.78)*.50;
+      g-=roll*(g-.76)*.54;
+      b-=roll*(b-.72)*.60;
+
+      // Matte black floor.
+      r=r*(1-o.fade)+o.fade*.10;
+      g=g*(1-o.fade)+o.fade*.095;
+      b=b*(1-o.fade)+o.fade*.09;
+
+      // Warm yellow balance rather than orange.
+      const warm=o.warmth;
+      r+=warm*.36;
+      g+=warm*.20;
+      b-=warm*.20;
+
+      lum=.2126*r+.7152*g+.0722*b;
+      const shadows=1-smoothstep(.12,.55,lum);
+      const highs=smoothstep(.52,.92,lum);
+      const mids=1-Math.min(1,Math.abs(lum-.52)*2.05);
+
+      // Subtle olive/cyan shadows, creamy yellow highlights.
+      r+=highs*.012-shadows*.010;
+      g+=shadows*.012+highs*.006+mids*.004;
+      b+=shadows*.014-highs*.018-mids*.006;
+
+      // Keep oranges warm and muted, greens deep but not neon.
+      const max=Math.max(r,g,b),min=Math.min(r,g,b);
+      const chroma=max-min;
+      const isOrange=r>g&&g>b&&chroma>.06;
+      const isGreen=g>r&&g>b&&chroma>.05;
+
+      if(isOrange){
+        r+=.010;
+        g+=.004;
+        b-=.010;
+      }
+      if(isGreen){
+        r-=.010;
+        g-=.004;
+        b-=.014;
+      }
+
+      // Black & white with warm paper tone.
+      if(o.mode==="mono"){
+        const gray=.24*r+.68*g+.08*b;
+        r=gray*1.015+.012;
+        g=gray*.995+.006;
+        b=gray*.965;
+      }
+
+      // Flash mode: brighter subject-like mids, controlled whites.
+      if(o.mode==="flash"){
+        const flashMid=smoothstep(.26,.72,lum)*(1-smoothstep(.72,.96,lum));
+        r+=flashMid*.030;
+        g+=flashMid*.023;
+        b+=flashMid*.018;
+      }
+
+      // Night mode: retain warm lamps while keeping dark areas visible.
+      if(o.mode==="night"){
+        const dark=1-smoothstep(.08,.48,lum);
+        r+=dark*.012;
+        g+=dark*.010;
+        b+=dark*.007;
+      }
+
+      // Diary mode gets a faint green cast.
+      if(o.mode==="diary"){
+        g+=.008;
+        b-=.006;
+      }
+
+      // Tiny luminance grain only—no harsh RGB noise.
+      const n=(Math.random()-.5)*o.grain;
+      r+=n;
+      g+=n*.92;
+      b+=n*.86;
+
+      out[i]=clamp(r)*255;
+      out[i+1]=clamp(g)*255;
+      out[i+2]=clamp(b)*255;
+      out[i+3]=255;
+    }
+  }
+
+  img.data.set(out);
+  x.putImageData(img,0,0);
+
+  // Soft creamy bloom around bright areas.
+  const bloom=x.createRadialGradient(w*.5,h*.40,0,w*.5,h*.40,w*.78);
+  bloom.addColorStop(0,`rgba(255,239,211,${o.bloom*.34})`);
+  bloom.addColorStop(.45,`rgba(255,217,178,${o.bloom*.10})`);
+  bloom.addColorStop(1,"rgba(255,255,255,0)");
+  x.save();
+  x.globalCompositeOperation="screen";
+  x.fillStyle=bloom;
+  x.fillRect(0,0,w,h);
+  x.restore();
+
+  // Very light vignette, much cleaner than disposable-film effects.
+  const vig=x.createRadialGradient(w/2,h/2,w*.30,w/2,h/2,w*.78);
+  vig.addColorStop(.58,"rgba(0,0,0,0)");
+  vig.addColorStop(1,`rgba(25,17,11,${o.vignette})`);
+  x.save();
+  x.globalCompositeOperation="multiply";
+  x.fillStyle=vig;
+  x.fillRect(0,0,w,h);
+  x.restore();
+
+  // Rare, subtle warm edge exposure only.
+  if(el.leakToggle.checked&&Math.random()>.72){
+    const fromLeft=Math.random()>.5;
+    const cx=fromLeft?0:w;
+    const cy=h*(.25+Math.random()*.50);
+    const leak=x.createRadialGradient(cx,cy,0,cx,cy,w*.48);
+    leak.addColorStop(0,"rgba(255,108,34,.16)");
+    leak.addColorStop(.42,"rgba(255,173,88,.07)");
+    leak.addColorStop(1,"rgba(255,190,100,0)");
+    x.save();
+    x.globalCompositeOperation="screen";
+    x.fillStyle=leak;
+    x.fillRect(0,0,w,h);
+    x.restore();
+  }
+}
+async function shootSequence(){if(!state.ready||state.busy)return;initAudio();state.photos=[];lock(true);renderProgress();for(let i=0;i<state.count;i++){el.hint.textContent=`frame ${i+1} of ${state.count}`;await countdown();flash();state.photos.push(capture());renderProgress(i+1);randomLeak();if(i<state.count-1)await wait(1100)}el.develop.classList.remove("hidden");printSound();await wait(4050);state.url=await buildStrip();el.strip.src=state.url;el.app.classList.add("hidden");el.develop.classList.add("hidden");el.result.classList.remove("hidden");el.strip.classList.remove("printing");void el.strip.offsetWidth;el.strip.classList.add("printing");printSound()}
+function load(src){return new Promise((res,rej)=>{const i=new Image;i.onload=()=>res(i);i.onerror=rej;i.src=src})}
+async function buildStrip(){const scale=2,W=820*scale,pad=50*scale,gap=24*scale,bottom=255*scale,pw=W-pad*2,ph=Math.round(pw*.75),H=pad+state.count*ph+(state.count-1)*gap+bottom,c=el.canvas,x=c.getContext("2d");c.width=W;c.height=H;
+ const bg=x.createLinearGradient(0,0,W,H);bg.addColorStop(0,"#eee7dc");bg.addColorStop(.5,"#e4dbcf");bg.addColorStop(1,"#d5c8b8");x.fillStyle=bg;x.fillRect(0,0,W,H);
+ for(let i=0;i<state.photos.length;i++){const img=await load(state.photos[i]),y=pad+i*(ph+gap);x.save();x.shadowColor="rgba(45,34,26,.22)";x.shadowBlur=26;x.shadowOffsetY=11;x.fillStyle="#b9aa99";x.fillRect(pad,y,pw,ph);x.restore();x.drawImage(img,pad,y,pw,ph);x.strokeStyle="rgba(34,26,20,.25)";x.lineWidth=3;x.strokeRect(pad+1,y+1,pw-2,ph-2)}
+ const [num,title,sub]=templates[el.template.value],fy=H-225*scale,cx=W/2;x.textAlign="center";x.fillStyle="#332d27";x.font=`500 ${26*scale}px DM Mono`;x.fillText(num,cx,fy+25*scale);x.font=`italic ${43*scale}px Instrument Serif`;x.fillText(title,cx,fy+82*scale);x.globalAlpha=.7;x.font=`400 ${13*scale}px DM Mono`;x.fillText(sub,cx,fy+120*scale);if(el.date.checked)x.fillText(new Date().toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"}).replaceAll("/","."),cx,fy+161*scale);x.globalAlpha=.55;x.fillText("BY BIANCA GITHA",cx,fy+202*scale);x.globalAlpha=1;
+ const d=x.getImageData(0,0,W,H),p=d.data;for(let i=0;i<p.length;i+=4){const n=(Math.random()-.5)*6;p[i]+=n;p[i+1]+=n;p[i+2]+=n}x.putImageData(d,0,0);x.strokeStyle="rgba(50,39,30,.18)";x.lineWidth=4;x.strokeRect(2,2,W-4,H-4);return c.toDataURL("image/png")}
+function initAudio(){if(!state.audio){const A=window.AudioContext||window.webkitAudioContext;if(A)state.audio=new A}}
+function beep(f=440,d=.1,v=.05,delay=0){if(!el.sound.checked||!state.audio)return;const a=state.audio,o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d)}
+function shutterSound(){beep(120,.07,.07);beep(900,.035,.035,.02)}
+function printSound(){for(let i=0;i<6;i++)beep(90+i*7,.08,.018,i*.11)}
+function reset(){if(state.busy)return;state.photos=[];state.url="";renderProgress();el.hint.textContent=state.ready?`ready for ${state.count} frames`:"allow camera access"}
+$("#enter").onclick=async()=>{el.hero.classList.add("hidden");el.app.classList.remove("hidden");await startCamera()}
+el.shoot.onclick=shootSequence;el.flip.onclick=async()=>{if(state.busy)return;state.facing=state.facing==="user"?"environment":"user";el.camera.style.transform=state.facing==="user"?"scaleX(-1)":"none";await startCamera()};el.reset.onclick=reset;
+$$(".filter").forEach(b=>b.onclick=()=>setLook(b.dataset.filter));$$(".segment button").forEach(b=>b.onclick=()=>{if(state.busy)return;state.count=+b.dataset.count;$$(".segment button").forEach(x=>x.classList.toggle("active",x===b));reset()});
+el.leakToggle.onchange=randomLeak;el.again.onclick=()=>{el.result.classList.add("hidden");el.app.classList.remove("hidden");state.busy=false;lock(false);reset();if(!state.stream)startCamera()};el.home.onclick=()=>{el.result.classList.add("hidden");el.hero.classList.remove("hidden");stopCamera();state.busy=false;reset()};el.save.onclick=()=>{if(!state.url)return;const a=document.createElement("a");a.href=state.url;a.download=`little-booth-${new Date().toISOString().slice(0,10)}.png`;a.click();el.saved.classList.add("on");beep(520,.16,.04);beep(680,.2,.035,.12);setTimeout(()=>el.saved.classList.remove("on"),2600)};
+$("#theme").onclick=()=>document.body.style.filter=document.body.style.filter?"":"contrast(.98) sepia(.08)";
+window.onbeforeunload=stopCamera;setLook("grd");renderProgress();
+</script>
+</body>
+</html>
