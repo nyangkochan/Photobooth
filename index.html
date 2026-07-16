@@ -3,465 +3,2296 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Little Booth by Bianca Githa — a vintage browser photobooth.">
+<meta name="description" content="Little Booth by Bianca Githa — browser photobooth with a post-capture film lab.">
 <title>Little Booth — by Bianca Githa</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --bg:#d9d0c3;--paper:#ece5da;--paper2:#d7cdbf;--ink:#28241f;--muted:#6e665d;
-  --line:rgba(43,37,31,.18);--dark:#292721;--cream:#f3ede4;--shadow:0 28px 70px rgba(52,42,34,.18);
+  --bg:#d8cfc2;
+  --bg-2:#cfc4b5;
+  --paper:#efe7dc;
+  --paper-2:#d9cdbf;
+  --ink:#28231e;
+  --muted:#6f675e;
+  --line:rgba(45,37,31,.18);
+  --glass:rgba(239,231,220,.60);
+  --dark:#2b2823;
+  --cream:#f7f0e7;
+  --shadow:0 28px 70px rgba(49,39,31,.18);
+  --small-shadow:0 14px 34px rgba(49,39,31,.14);
+  --radius-xl:30px;
+  --radius-lg:22px;
+  --radius-md:14px;
 }
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:
-radial-gradient(circle at 10% 10%,rgba(255,255,255,.35),transparent 25%),
-linear-gradient(135deg,#ddd5ca,#cfc4b6);color:var(--ink);font-family:Manrope,sans-serif;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.27;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
-button,select,input{font:inherit}.hidden{display:none!important}
-header{position:fixed;inset:0 0 auto;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(18px,4vw,56px);pointer-events:none}
-.logo{pointer-events:auto;font-family:"Instrument Serif",serif;font-size:1.55rem}.logo small{font:400 .56rem "DM Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-left:8px}
-.icon{pointer-events:auto;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:rgba(241,234,224,.55);backdrop-filter:blur(14px);cursor:pointer}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:Manrope,sans-serif;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(255,255,255,.38),transparent 28%),
+    radial-gradient(circle at 88% 72%,rgba(115,88,66,.13),transparent 32%),
+    linear-gradient(135deg,var(--bg),var(--bg-2));
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+  opacity:.22;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 170 170' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+}
+button,select,input{font:inherit}
+button{border:0}
+img,video,canvas{display:block;max-width:100%}
+.hidden{display:none!important}
 .screen{min-height:100vh}
-.hero{position:relative;display:grid;place-items:center;padding:105px 22px 52px;text-align:center;overflow:hidden}
-.hero:after{content:"";position:absolute;width:460px;height:460px;border-radius:50%;right:-100px;bottom:-140px;background:rgba(108,85,65,.11);filter:blur(15px)}
-.kicker{font:500 .66rem "DM Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-h1{max-width:930px;margin:20px auto 20px;font:400 clamp(4.2rem,12vw,10rem)/.77 "Instrument Serif",serif;letter-spacing:-.055em}
-h1 em{display:block;font-weight:400}
-.lead{max-width:470px;margin:0 auto;color:var(--muted);font-size:.9rem;line-height:1.8}
-.btn{border:0;border-radius:999px;padding:14px 22px;cursor:pointer;transition:.25s}
-.btn.primary{background:var(--dark);color:var(--cream);box-shadow:0 16px 30px rgba(45,37,31,.22)}
-.btn.ghost{border:1px solid var(--line);background:rgba(242,236,227,.55);color:var(--ink)}
+.kicker{
+  color:var(--muted);
+  font:500 .64rem "DM Mono",monospace;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.card{
+  border:1px solid var(--line);
+  border-radius:var(--radius-xl);
+  background:var(--glass);
+  backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
+}
+.btn{
+  border-radius:999px;
+  padding:14px 21px;
+  cursor:pointer;
+  transition:transform .24s ease,opacity .24s ease,background .24s ease;
+}
 .btn:hover{transform:translateY(-3px)}
-.hero .btn{margin-top:32px;min-width:165px}
-.note{margin-top:18px;font:400 .69rem "DM Mono",monospace;color:var(--muted)}
-.polaroid{position:absolute;width:120px;padding:8px 8px 26px;background:#eee7dc;box-shadow:0 20px 38px rgba(53,42,34,.18);transform:rotate(-7deg);left:7%;top:22%}
-.polaroid:before{content:"";display:block;aspect-ratio:4/5;background:linear-gradient(135deg,#b9afa2,#5a5149);filter:sepia(.6) contrast(.85)}
-.polaroid.two{left:auto;right:8%;top:auto;bottom:14%;transform:rotate(8deg)}
-.app{padding:98px clamp(12px,3vw,44px) 38px}
-.layout{max-width:1450px;margin:auto;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.58fr);gap:28px}
-.card{border:1px solid var(--line);background:rgba(237,229,218,.55);backdrop-filter:blur(18px);box-shadow:var(--shadow);border-radius:28px}
-.camera-card{padding:16px}.topline{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:8px 8px 16px}
-.title{font:400 2rem "Instrument Serif",serif}.status{font:500 .62rem "DM Mono",monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#91877b;margin-right:8px}.dot.on{background:#b35446;box-shadow:0 0 0 5px rgba(179,84,70,.12)}
-.frame{position:relative;overflow:hidden;border-radius:20px;background:#161513;aspect-ratio:4/3;isolation:isolate}
-video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.placeholder{position:absolute;inset:0;z-index:4;display:grid;place-items:center;text-align:center;color:#eee4d8;background:#1b1916;padding:30px}
-.placeholder h3{font:400 1.7rem "Instrument Serif",serif;margin:0 0 8px}.placeholder p{max-width:330px;font-size:.75rem;line-height:1.7;color:#a79d92}
-.fx,.grain,.scratches,.vig,.leak{position:absolute;inset:0;pointer-events:none;z-index:2}
-.grain{opacity:.11;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");animation:grain .18s steps(2) infinite}
-.scratches{opacity:.23;background:linear-gradient(90deg,transparent 12%,rgba(255,255,255,.12) 12.12%,transparent 12.25%,transparent 74%,rgba(0,0,0,.12) 74.1%,transparent 74.25%);animation:scratch 4s linear infinite}
-.vig{background:radial-gradient(ellipse,transparent 45%,rgba(17,12,8,.38) 100%);mix-blend-mode:multiply}
-.leak{opacity:0;filter:blur(22px);mix-blend-mode:screen;background:radial-gradient(circle at 0 45%,rgba(255,118,42,.42),transparent 42%);transition:.3s}.leak.on{opacity:.24}
-.flash{position:absolute;inset:0;z-index:10;background:white;opacity:0;pointer-events:none}.flash.go{animation:flash .46s}
-.count{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(0,0,0,.08)}.count b{font:400 clamp(7rem,18vw,13rem) "Instrument Serif",serif;color:white;text-shadow:0 12px 30px rgba(0,0,0,.3);animation:pop .9s}
-.progress{position:absolute;z-index:8;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px}.progress i{width:7px;height:7px;border:1px solid white;border-radius:50%}.progress i.done{background:white}
-.controls{display:flex;justify-content:center;align-items:center;gap:16px;padding:18px 4px 2px;flex-wrap:wrap}
-.shutter{width:76px;height:76px;border-radius:50%;border:1px solid var(--line);background:rgba(245,238,229,.75);box-shadow:inset 0 0 0 5px rgba(255,255,255,.35),0 12px 24px rgba(48,38,31,.18);cursor:pointer}
-.shutter:before{content:"";display:block;width:52px;height:52px;border-radius:50%;background:#302c27;margin:auto}
-.hint{width:100%;text-align:center;color:var(--muted);font:400 .72rem "DM Mono",monospace}
-.settings{padding:24px;position:sticky;top:92px}.settings h2{font:400 1.9rem "Instrument Serif",serif;margin:4px 0 22px}.group{padding:18px 0;border-top:1px solid var(--line)}.group:first-of-type{border:0;padding-top:0}
-.label{display:block;margin-bottom:11px;font:500 .62rem "DM Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.filter{border:1px solid var(--line);border-radius:12px;padding:12px;background:transparent;text-align:left;cursor:pointer;color:var(--ink)}
-.filter.active{background:#302c27;color:#f2ebe1}.filter strong{display:block;font:400 1rem "Instrument Serif",serif}.filter span{display:block;margin-top:2px;font-size:.55rem;opacity:.62;line-height:1.4}
-.segment{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.segment button{padding:10px;border:1px solid var(--line);background:transparent;border-radius:10px;cursor:pointer}.segment button.active{background:#302c27;color:#f2ebe1}
-select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:rgba(245,239,230,.55);color:var(--ink)}
-.toggle{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:.76rem}.toggle input{accent-color:#302c27}
-.overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(27,23,19,.5);backdrop-filter:blur(16px);padding:20px}
-.devcard{width:min(420px,100%);padding:42px 28px;text-align:center;background:var(--paper);border-radius:25px;box-shadow:var(--shadow)}
-.devcard h2{font:italic 400 2.2rem "Instrument Serif",serif;margin:12px}.devcard p{font-size:.74rem;color:var(--muted)}
-.bar{height:3px;background:#cfc3b4;border-radius:99px;overflow:hidden;margin:25px auto 0;max-width:270px}.bar i{display:block;height:100%;width:0;background:#302c27;animation:develop 4s forwards}
-.result{position:fixed;inset:0;z-index:90;overflow:auto;background:var(--bg);padding:90px 20px 45px}
-.resultin{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr .7fr;gap:55px;align-items:center;min-height:calc(100vh - 135px)}
-.printer{min-height:650px;position:relative;display:flex;justify-content:center;padding-top:62px}.machine{position:absolute;top:0;width:min(450px,92%);height:105px;border-radius:23px;background:#bbb0a2;border:1px solid var(--line);box-shadow:var(--shadow)}.machine:after{content:"";position:absolute;left:11%;right:11%;bottom:14px;height:14px;border-radius:4px;background:#1c1916}.machine span{position:absolute;top:20px;left:25px;font:400 .68rem "DM Mono",monospace;color:#61594f}
-#strip{max-height:680px;max-width:92%;filter:drop-shadow(0 25px 28px rgba(45,34,27,.27));transform-origin:top center}.printing{animation:print 2.5s forwards}
-.resultcopy h2{font:italic 400 clamp(3.6rem,7vw,6rem)/.86 "Instrument Serif",serif;margin:0 0 18px}.resultcopy p{max-width:390px;color:var(--muted);font-size:.8rem;line-height:1.8}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
-.saved{margin-top:16px;font:italic 400 1rem "Instrument Serif",serif;opacity:0;transition:.3s}.saved.on{opacity:1}
-.toast{position:fixed;right:20px;bottom:20px;z-index:120;padding:13px 16px;border-radius:12px;background:#eee6dc;box-shadow:var(--shadow);font-size:.72rem;opacity:0;transform:translateY(12px);transition:.3s}.toast.on{opacity:1;transform:none}
-#camera.filter-grd{filter:contrast(.84) brightness(1.04) saturate(.76) sepia(.09) hue-rotate(-4deg)}
-#camera.filter-grd-mono{filter:grayscale(1) sepia(.18) contrast(.87) brightness(1.06)}
-#camera.filter-grd-night{filter:contrast(.82) brightness(.96) saturate(.78) sepia(.11) hue-rotate(-5deg)}
-#camera.filter-grd-flash{filter:contrast(.86) brightness(1.11) saturate(.81) sepia(.08) hue-rotate(-3deg)}
-#camera.filter-diary{filter:sepia(.12) saturate(.74) contrast(.82) brightness(1.06) hue-rotate(-9deg)}
-#camera.filter-soft-film{filter:sepia(.12) saturate(.72) contrast(.80) brightness(1.08)}
-@keyframes grain{0%{transform:translate(0)}25%{transform:translate(-2%,1%)}50%{transform:translate(1%,-2%)}75%{transform:translate(2%,2%)}100%{transform:translate(-1%,-1%)}}
-@keyframes scratch{to{background-position:180% 0}}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.primary{background:var(--dark);color:var(--cream)}
+.btn.ghost{border:1px solid var(--line);background:rgba(246,239,230,.58);color:var(--ink)}
+.btn.small{padding:10px 15px;font-size:.72rem}
+.icon-button{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);
+  background:rgba(242,235,226,.55);
+  cursor:pointer;
+  backdrop-filter:blur(12px);
+}
+
+header{
+  position:fixed;
+  z-index:70;
+  inset:0 0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:19px clamp(17px,4vw,54px);
+  pointer-events:none;
+}
+.logo{
+  pointer-events:auto;
+  font:400 1.55rem "Instrument Serif",serif;
+}
+.logo small{
+  margin-left:8px;
+  color:var(--muted);
+  font:400 .54rem "DM Mono",monospace;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.header-actions{pointer-events:auto;display:flex;gap:8px}
+
+/* LANDING */
+.hero{
+  position:relative;
+  display:grid;
+  place-items:center;
+  padding:105px 20px 48px;
+  overflow:hidden;
+  text-align:center;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  width:480px;height:480px;
+  right:-130px;bottom:-170px;
+  border-radius:50%;
+  background:rgba(102,80,63,.10);
+  filter:blur(18px);
+}
+.hero-inner{position:relative;z-index:2}
+.hero h1{
+  max-width:930px;
+  margin:18px auto 20px;
+  font:400 clamp(4.3rem,12vw,10rem)/.77 "Instrument Serif",serif;
+  letter-spacing:-.06em;
+}
+.hero h1 em{display:block;font-weight:400}
+.hero p{
+  max-width:500px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.88rem;
+  line-height:1.8;
+}
+.hero .btn{margin-top:30px;min-width:168px}
+.hero-note{
+  margin-top:18px;
+  color:var(--muted);
+  font:400 .67rem "DM Mono",monospace;
+}
+.floating-print{
+  position:absolute;
+  z-index:1;
+  width:112px;
+  padding:8px 8px 24px;
+  background:#eee6db;
+  box-shadow:0 20px 40px rgba(51,40,31,.18);
+  transform:rotate(-7deg);
+  left:7%;
+  top:20%;
+}
+.floating-print::before{
+  content:"";
+  display:block;
+  aspect-ratio:4/5;
+  background:
+    linear-gradient(140deg,rgba(203,190,176,.25),rgba(60,54,48,.68)),
+    radial-gradient(circle at 50% 40%,#9b8f84,#514940);
+  filter:sepia(.42) saturate(.72) contrast(.88);
+}
+.floating-print.two{
+  left:auto;right:8%;top:auto;bottom:14%;
+  transform:rotate(8deg);
+}
+
+/* CAMERA */
+.app{padding:96px clamp(10px,3vw,42px) 38px}
+.camera-layout{
+  max-width:1450px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(300px,.58fr);
+  gap:28px;
+}
+.camera-card{padding:16px}
+.panel-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  padding:8px 8px 16px;
+}
+.panel-title{font:400 2rem "Instrument Serif",serif}
+.status{
+  color:var(--muted);
+  font:500 .61rem "DM Mono",monospace;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.status-dot{
+  display:inline-block;
+  width:7px;height:7px;border-radius:50%;
+  margin-right:8px;
+  background:#91877b;
+}
+.status-dot.on{
+  background:#b45043;
+  box-shadow:0 0 0 5px rgba(180,80,67,.12);
+}
+.camera-frame{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  background:#161513;
+  aspect-ratio:4/3;
+  isolation:isolate;
+}
+#camera{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transform:scaleX(-1);
+}
+.camera-placeholder{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:grid;
+  place-items:center;
+  padding:30px;
+  text-align:center;
+  color:#ede5da;
+  background:#1a1815;
+}
+.camera-placeholder h3{
+  margin:0 0 8px;
+  font:400 1.7rem "Instrument Serif",serif;
+}
+.camera-placeholder p{
+  max-width:320px;
+  margin:0;
+  color:#a99f94;
+  font-size:.73rem;
+  line-height:1.7;
+}
+.fx,.preview-grain,.preview-vig,.preview-scan,.preview-leak{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:2;
+}
+.preview-grain{
+  opacity:.075;
+  mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  animation:grainMove .18s steps(2) infinite;
+}
+.preview-vig{
+  background:radial-gradient(ellipse,transparent 50%,rgba(15,10,7,.20) 100%);
+  mix-blend-mode:multiply;
+}
+.preview-scan{
+  opacity:.035;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.22) 0 1px,transparent 1px 4px);
+  mix-blend-mode:soft-light;
+}
+.preview-leak{
+  opacity:0;
+  filter:blur(22px);
+  mix-blend-mode:screen;
+  background:radial-gradient(circle at 0 45%,rgba(255,125,45,.34),transparent 42%);
+  transition:opacity .3s;
+}
+.preview-leak.on{opacity:.18}
+.progress{
+  position:absolute;
+  top:16px;left:50%;
+  transform:translateX(-50%);
+  z-index:8;
+  display:flex;gap:7px;
+}
+.progress i{
+  width:7px;height:7px;
+  border:1px solid white;
+  border-radius:50%;
+}
+.progress i.done{background:white}
+.countdown{
+  position:absolute;
+  inset:0;
+  z-index:9;
+  display:grid;
+  place-items:center;
+  background:rgba(0,0,0,.08);
+}
+.countdown b{
+  color:white;
+  font:400 clamp(7rem,18vw,13rem) "Instrument Serif",serif;
+  text-shadow:0 12px 30px rgba(0,0,0,.3);
+  animation:countPop .9s;
+}
+.flash{
+  position:absolute;
+  inset:0;
+  z-index:10;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+}
+.flash.go{animation:flash .46s}
+.camera-controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+  padding:18px 4px 2px;
+  flex-wrap:wrap;
+}
+.shutter{
+  width:76px;height:76px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:rgba(245,238,229,.75);
+  box-shadow:inset 0 0 0 5px rgba(255,255,255,.35),0 12px 24px rgba(48,38,31,.18);
+  cursor:pointer;
+}
+.shutter::before{
+  content:"";
+  display:block;
+  width:52px;height:52px;
+  margin:auto;
+  border-radius:50%;
+  background:#302c27;
+}
+.hint{
+  width:100%;
+  text-align:center;
+  color:var(--muted);
+  font:400 .70rem "DM Mono",monospace;
+}
+.settings{
+  position:sticky;
+  top:90px;
+  padding:24px;
+}
+.settings h2{
+  margin:4px 0 21px;
+  font:400 1.9rem "Instrument Serif",serif;
+}
+.group{padding:18px 0;border-top:1px solid var(--line)}
+.group:first-of-type{border-top:0;padding-top:0}
+.label{
+  display:block;
+  margin-bottom:11px;
+  color:var(--muted);
+  font:500 .61rem "DM Mono",monospace;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.segment{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.segment button{
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:transparent;
+  cursor:pointer;
+}
+.segment button.active{background:var(--dark);color:var(--cream)}
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:rgba(245,239,230,.55);
+  color:var(--ink);
+}
+.toggle{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:12px 0;
+  font-size:.75rem;
+}
+.toggle input{accent-color:var(--dark)}
+
+/* DEVELOPING */
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(27,23,19,.52);
+  backdrop-filter:blur(16px);
+}
+.develop-card{
+  width:min(430px,100%);
+  padding:43px 29px;
+  border-radius:26px;
+  background:var(--paper);
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+.develop-photo{
+  width:84px;height:106px;
+  margin:0 auto 24px;
+  padding:8px 8px 22px;
+  background:#e0d5c8;
+  box-shadow:var(--small-shadow);
+}
+.develop-photo::before{
+  content:"";
+  display:block;
+  height:100%;
+  background:linear-gradient(145deg,#756a60,#2f2a25);
+  opacity:0;
+  filter:blur(10px) saturate(0);
+  animation:developImage 3.8s forwards;
+}
+.develop-card h2{
+  margin:10px 0 8px;
+  font:italic 400 2.25rem "Instrument Serif",serif;
+}
+.develop-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:.73rem;
+}
+.develop-bar{
+  max-width:280px;
+  height:3px;
+  margin:25px auto 0;
+  overflow:hidden;
+  border-radius:99px;
+  background:#cec1b2;
+}
+.develop-bar i{
+  display:block;
+  width:0;height:100%;
+  background:var(--dark);
+  animation:developBar 4s forwards;
+}
+
+/* FILM LAB */
+.lab{
+  padding:92px clamp(10px,3vw,38px) 40px;
+}
+.lab-layout{
+  max-width:1500px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:minmax(0,1.18fr) minmax(330px,.72fr);
+  gap:28px;
+  align-items:start;
+}
+.lab-preview-card{padding:18px}
+.lab-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:7px 7px 16px;
+}
+.lab-head h2{
+  margin:3px 0 0;
+  font:400 2rem "Instrument Serif",serif;
+}
+.preview-wrap{
+  min-height:680px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:22px;
+  border-radius:20px;
+  background:
+    linear-gradient(rgba(43,38,33,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(43,38,33,.035) 1px,transparent 1px),
+    rgba(233,224,212,.54);
+  background-size:20px 20px;
+}
+#labStrip{
+  max-height:650px;
+  width:auto;
+  filter:drop-shadow(0 24px 26px rgba(43,32,25,.23));
+}
+.lab-controls{
+  position:sticky;
+  top:90px;
+  padding:23px;
+}
+.lab-controls h2{
+  margin:4px 0 20px;
+  font:400 1.9rem "Instrument Serif",serif;
+}
+.filter-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.filter-chip{
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:transparent;
+  color:var(--ink);
+  text-align:left;
+  cursor:pointer;
+}
+.filter-chip.active{
+  background:var(--dark);
+  color:var(--cream);
+}
+.filter-chip strong{
+  display:block;
+  font:400 1rem "Instrument Serif",serif;
+}
+.filter-chip span{
+  display:block;
+  margin-top:2px;
+  font-size:.54rem;
+  line-height:1.4;
+  opacity:.62;
+}
+.slider-row{margin:15px 0}
+.slider-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+  font-size:.69rem;
+}
+.slider-top output{
+  color:var(--muted);
+  font:400 .61rem "DM Mono",monospace;
+}
+input[type="range"]{
+  width:100%;
+  accent-color:var(--dark);
+}
+.switch-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.switch-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  font-size:.68rem;
+}
+.switch-card input{accent-color:var(--dark)}
+
+.frame-swatches{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+.frame-swatch{
+  position:relative;
+  min-height:58px;
+  padding:9px 8px 8px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(246,239,230,.38);
+  color:var(--ink);
+  cursor:pointer;
+  text-align:center;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.frame-swatch:hover{transform:translateY(-2px)}
+.frame-swatch.active{
+  border-color:rgba(42,35,29,.48);
+  box-shadow:0 8px 18px rgba(48,38,31,.13);
+}
+.frame-swatch i{
+  display:block;
+  width:100%;
+  height:25px;
+  margin-bottom:6px;
+  border:1px solid rgba(45,37,31,.16);
+  border-radius:7px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+}
+.frame-swatch span{
+  font:400 .56rem "DM Mono",monospace;
+  letter-spacing:.04em;
+}
+.frame-swatch[data-frame="cream"] i{background:linear-gradient(135deg,#f0e8dc,#d7cab9)}
+.frame-swatch[data-frame="black"] i{background:linear-gradient(135deg,#2f2b27,#141210)}
+.frame-swatch[data-frame="blush"] i{background:linear-gradient(135deg,#ead7d5,#c8aaa8)}
+.frame-swatch[data-frame="mocha"] i{background:linear-gradient(135deg,#b69c87,#735b49)}
+.frame-swatch[data-frame="sage"] i{background:linear-gradient(135deg,#c7cbbb,#8f9780)}
+.frame-swatch[data-frame="blue"] i{background:linear-gradient(135deg,#c7d0d2,#86989d)}
+
+.lab-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+.photo-thumbs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:6px 0 2px;
+}
+.photo-thumb{
+  width:76px;
+  flex:0 0 auto;
+  padding:5px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#e4d8c9;
+}
+.photo-thumb img{
+  width:100%;
+  aspect-ratio:4/3;
+  object-fit:cover;
+}
+
+/* FINAL */
+.result{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  overflow:auto;
+  padding:90px 20px 45px;
+  background:var(--bg);
+}
+.result-inner{
+  max-width:1060px;
+  min-height:calc(100vh - 135px);
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr .70fr;
+  gap:55px;
+  align-items:center;
+}
+.printer{
+  position:relative;
+  min-height:650px;
+  display:flex;
+  justify-content:center;
+  padding-top:62px;
+}
+.machine{
+  position:absolute;
+  top:0;
+  width:min(450px,92%);
+  height:105px;
+  border:1px solid rgba(50,39,31,.22);
+  border-radius:23px;
+  background:linear-gradient(180deg,#c4baae,#a99c8d);
+  box-shadow:0 28px 55px rgba(50,39,31,.24),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.machine::after{
+  content:"";
+  position:absolute;
+  left:11%;right:11%;bottom:14px;
+  height:14px;
+  border-radius:4px;
+  background:#171411;
+  box-shadow:inset 0 4px 8px rgba(0,0,0,.65),0 2px 0 rgba(255,255,255,.18);
+}
+.machine span{
+  position:absolute;
+  top:20px;left:25px;
+  color:#62594f;
+  font:400 .67rem "DM Mono",monospace;
+}
+#finalStrip{
+  max-height:680px;
+  max-width:92%;
+  filter:drop-shadow(0 25px 28px rgba(45,34,27,.27));
+  transform-origin:top center;
+}
+#finalStrip.printing{animation:printStrip 2.5s forwards}
+.result-copy h2{
+  margin:0 0 18px;
+  font:italic 400 clamp(3.6rem,7vw,6rem)/.86 "Instrument Serif",serif;
+}
+.result-copy p{
+  max-width:390px;
+  color:var(--muted);
+  font-size:.8rem;
+  line-height:1.8;
+}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.saved{
+  margin-top:16px;
+  opacity:0;
+  font:italic 400 1rem "Instrument Serif",serif;
+  transition:.3s;
+}
+.saved.on{opacity:1}
+.toast{
+  position:fixed;
+  right:20px;bottom:20px;
+  z-index:150;
+  padding:13px 16px;
+  border-radius:12px;
+  background:#eee6dc;
+  box-shadow:var(--shadow);
+  font-size:.71rem;
+  opacity:0;
+  transform:translateY(12px);
+  transition:.3s;
+}
+.toast.on{opacity:1;transform:none}
+
+/* Preview-only camera looks */
+#camera.preview-clean{filter:contrast(.94) brightness(1.02) saturate(.90)}
+#camera.preview-warm{filter:contrast(.90) brightness(1.04) saturate(.82) sepia(.05)}
+#camera.preview-mono{filter:grayscale(1) sepia(.12) contrast(.90) brightness(1.04)}
+
+@keyframes grainMove{
+  0%{transform:translate(0)}
+  25%{transform:translate(-2%,1%)}
+  50%{transform:translate(1%,-2%)}
+  75%{transform:translate(2%,2%)}
+  100%{transform:translate(-1%,-1%)}
+}
+@keyframes countPop{
+  0%{opacity:0;transform:scale(1.4);filter:blur(9px)}
+  25%{opacity:1;transform:none;filter:none}
+  100%{opacity:0;transform:scale(.8)}
+}
 @keyframes flash{15%{opacity:.95}100%{opacity:0}}
-@keyframes pop{0%{opacity:0;transform:scale(1.4);filter:blur(9px)}25%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:scale(.8)}}
-@keyframes develop{to{width:100%}}
-@keyframes print{0%{opacity:0;transform:translateY(-420px)}12%{opacity:1}80%{transform:translateY(0)}100%{transform:rotate(-.5deg)}}
-@media(max-width:950px){.layout,.resultin{grid-template-columns:1fr}.settings{position:static}.resultcopy{text-align:center}.resultcopy p{margin:auto}.actions{justify-content:center}}
-@media(max-width:620px){.polaroid{opacity:.35}.frame{aspect-ratio:3/4}.filters{grid-template-columns:1fr}.app{padding-inline:9px}.camera-card{border-radius:21px}.printer{min-height:580px}#strip{max-height:570px}.logo small{display:none}}
+@keyframes developImage{
+  0%{opacity:0;filter:blur(10px) saturate(0)}
+  35%{opacity:.22}
+  100%{opacity:.95;filter:blur(0) saturate(.76)}
+}
+@keyframes developBar{to{width:100%}}
+@keyframes printStrip{
+  0%{opacity:0;transform:translateY(-430px)}
+  12%{opacity:1}
+  80%{transform:translateY(0)}
+  100%{transform:rotate(-.5deg)}
+}
+
+@media(max-width:980px){
+  .camera-layout,.lab-layout,.result-inner{grid-template-columns:1fr}
+  .settings,.lab-controls{position:static}
+  .result-copy{text-align:center}
+  .result-copy p{margin:auto}
+  .result-actions{justify-content:center}
+}
+@media(max-width:650px){
+  .floating-print{opacity:.32}
+  .camera-frame{aspect-ratio:3/4}
+  .filter-grid{grid-template-columns:1fr}
+  .switch-grid{grid-template-columns:1fr}
+  .preview-wrap{min-height:580px;padding:14px}
+  #labStrip{max-height:550px}
+  .printer{min-height:580px}
+  #finalStrip{max-height:570px}
+  .logo small{display:none}
+}
 </style>
 </head>
+
 <body>
-<header><div class="logo">little booth.<small>by Bianca Githa</small></div><button class="icon" id="theme">◐</button></header>
-
-<section class="screen hero" id="hero">
-  <div class="polaroid"></div><div class="polaroid two"></div>
-  <div>
-    <div class="kicker">browser photo booth</div>
-    <h1>take the photo.<em>keep the feeling.</em></h1>
-    <p class="lead">A small photo booth for warm compact-camera color, soft flash, and slightly imperfect pictures.</p>
-    <button class="btn primary" id="enter">enter booth</button>
-    <div class="note">made by Bianca Githa</div>
+<header>
+  <div class="logo">little booth.<small>by Bianca Githa</small></div>
+  <div class="header-actions">
+    <button class="icon-button" id="themeButton" aria-label="Toggle appearance">◐</button>
   </div>
-</section>
+</header>
 
-<section class="screen app hidden" id="app">
-<div class="layout">
-  <div class="card camera-card">
-    <div class="topline"><div><div class="kicker">camera</div><div class="title">ready when you are.</div></div><div class="status"><span class="dot" id="dot"></span><span id="status">camera off</span></div></div>
-    <div class="frame">
-      <video id="camera" autoplay playsinline muted></video>
-      <div class="placeholder" id="placeholder"><div><h3>camera access needed</h3><p>Allow camera access to begin. Everything stays on this device.</p></div></div>
-      <div class="fx"></div><div class="grain"></div><div class="scratches"></div><div class="vig"></div><div class="leak" id="leak"></div>
-      <div class="progress" id="progress"></div>
-      <div class="count hidden" id="count"><b id="countNum">3</b></div>
-      <div class="flash" id="flash"></div>
-    </div>
-    <div class="controls">
-      <button class="btn ghost" id="flip" disabled>flip</button>
-      <button class="shutter" id="shoot" disabled aria-label="Take photos"></button>
-      <button class="btn ghost" id="reset">reset</button>
-      <div class="hint" id="hint">allow camera access</div>
-    </div>
-  </div>
+<main>
+  <section class="screen hero" id="heroScreen">
+    <div class="floating-print"></div>
+    <div class="floating-print two"></div>
 
-  <aside class="card settings">
-    <div class="kicker">settings</div><h2>choose your camera.</h2>
-    <div class="group">
-      <label class="label">Camera look</label>
-      <div class="filters">
-        <button class="filter active" data-filter="grd"><strong>GRD Classic</strong><span>warm, flat, muted compact color</span></button>
-        <button class="filter" data-filter="grd-night"><strong>GRD Night</strong><span>warm lamps, lifted dark background</span></button>
-        <button class="filter" data-filter="grd-flash"><strong>GRD Flash</strong><span>creamy flash and softer highlights</span></button>
-        <button class="filter" data-filter="grd-mono"><strong>GRD B&W</strong><span>warm monochrome, matte blacks</span></button>
-        <button class="filter" data-filter="diary"><strong>Diary</strong><span>faded green and low contrast</span></button>
-        <button class="filter" data-filter="soft-film"><strong>Soft Film</strong><span>cream tone and gentle bloom</span></button>
+    <div class="hero-inner">
+      <div class="kicker">little booth / roll 01</div>
+      <h1>take the photo.<em>choose the feeling.</em></h1>
+      <p>
+        Take your pictures first, then finish them in the film lab with
+        warm compact-camera color, soft flash, faded blacks, and your own adjustments.
+      </p>
+      <button class="btn primary" id="enterButton">enter booth</button>
+      <div class="hero-note">designed & coded by Bianca Githa</div>
+    </div>
+  </section>
+
+  <section class="screen app hidden" id="cameraScreen">
+    <div class="camera-layout">
+      <section class="card camera-card">
+        <div class="panel-top">
+          <div>
+            <div class="kicker">camera / capture</div>
+            <div class="panel-title">ready when you are.</div>
+          </div>
+          <div class="status">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="cameraStatus">camera off</span>
+          </div>
+        </div>
+
+        <div class="camera-frame">
+          <video id="camera" class="preview-clean" autoplay playsinline muted></video>
+
+          <div class="camera-placeholder" id="cameraPlaceholder">
+            <div>
+              <h3>camera access needed</h3>
+              <p>Allow camera access to begin. Your photos stay inside this browser.</p>
+            </div>
+          </div>
+
+          <div class="fx"></div>
+          <div class="preview-grain"></div>
+          <div class="preview-vig"></div>
+          <div class="preview-scan"></div>
+          <div class="preview-leak" id="previewLeak"></div>
+
+          <div class="progress" id="shotProgress"></div>
+
+          <div class="countdown hidden" id="countdown">
+            <b id="countdownNumber">3</b>
+          </div>
+
+          <div class="flash" id="flash"></div>
+        </div>
+
+        <div class="camera-controls">
+          <button class="btn ghost small" id="flipButton" disabled>flip</button>
+          <button class="shutter" id="shootButton" disabled aria-label="Take pictures"></button>
+          <button class="btn ghost small" id="resetButton">reset</button>
+          <div class="hint" id="cameraHint">allow camera access</div>
+        </div>
+      </section>
+
+      <aside class="card settings">
+        <div class="kicker">capture settings</div>
+        <h2>before the flash.</h2>
+
+        <div class="group">
+          <label class="label">Frames</label>
+          <div class="segment">
+            <button data-count="2">2</button>
+            <button data-count="3" class="active">3</button>
+            <button data-count="4">4</button>
+            <button data-count="6">6</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label class="label">Preview</label>
+          <select id="previewSelect">
+            <option value="clean">Clean</option>
+            <option value="warm">Warm</option>
+            <option value="mono">B&W</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label class="label">Strip note</label>
+          <select id="templateSelect">
+            <option value="classic">little booth</option>
+            <option value="birthday">birthday roll</option>
+            <option value="date">our little day</option>
+            <option value="cafe">coffee afternoon</option>
+            <option value="summer">summer roll</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label class="toggle"><span>date stamp</span><input id="dateToggle" type="checkbox" checked></label>
+          <label class="toggle"><span>camera sound</span><input id="soundToggle" type="checkbox" checked></label>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="overlay hidden" id="developingScreen">
+    <div class="develop-card">
+      <div class="develop-photo"></div>
+      <div class="kicker">little booth lab</div>
+      <h2>developing...</h2>
+      <p>please wait while your contact sheet appears.</p>
+      <div class="develop-bar"><i></i></div>
+    </div>
+  </section>
+
+  <section class="screen lab hidden" id="labScreen">
+    <div class="lab-layout">
+      <section class="card lab-preview-card">
+        <div class="lab-head">
+          <div>
+            <div class="kicker">post-capture film lab</div>
+            <h2>choose the final look.</h2>
+          </div>
+          <button class="btn ghost small" id="retakeButton">retake</button>
+        </div>
+
+        <div class="preview-wrap">
+          <img id="labStrip" alt="Live edited photo strip preview">
+        </div>
+
+        <div class="photo-thumbs" id="photoThumbs"></div>
+      </section>
+
+      <aside class="card lab-controls">
+        <div class="kicker">film presets</div>
+        <h2>finish the roll.</h2><div id="editStatus" style="margin:-12px 0 14px;color:var(--muted);font:400 .61rem DM Mono,monospace">move a slider to update the preview</div>
+
+        <div class="group">
+          <div class="filter-grid" id="filterGrid">
+            <button class="filter-chip active" data-preset="grdClassic">
+              <strong>GRD 01</strong><span>warm compact color</span>
+            </button>
+            <button class="filter-chip" data-preset="grdNight">
+              <strong>GRD 02</strong><span>night café</span>
+            </button>
+            <button class="filter-chip" data-preset="grdFlash">
+              <strong>GRD 03</strong><span>soft direct flash</span>
+            </button>
+            <button class="filter-chip" data-preset="grdMono">
+              <strong>GRD B&W</strong><span>warm monochrome</span>
+            </button>
+            <button class="filter-chip" data-preset="portra">
+              <strong>Portra Soft</strong><span>skin-friendly warm film</span>
+            </button>
+            <button class="filter-chip" data-preset="cafe">
+              <strong>Café</strong><span>brown shadows, creamy light</span>
+            </button>
+            <button class="filter-chip" data-preset="disposable">
+              <strong>Disposable</strong><span>flash, dust, stronger grain</span>
+            </button>
+            <button class="filter-chip" data-preset="photoBooth">
+              <strong>Booth B&W</strong><span>matte monochrome strip</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label class="label">Adjustments</label>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Warmth</span><output id="warmthOut">0</output></div>
+            <input id="warmthSlider" type="range" min="-50" max="50" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Fade</span><output id="fadeOut">0</output></div>
+            <input id="fadeSlider" type="range" min="-40" max="60" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Grain</span><output id="grainOut">0</output></div>
+            <input id="grainSlider" type="range" min="-30" max="70" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Bloom</span><output id="bloomOut">0</output></div>
+            <input id="bloomSlider" type="range" min="-30" max="70" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Contrast</span><output id="contrastOut">0</output></div>
+            <input id="contrastSlider" type="range" min="-50" max="50" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Highlights</span><output id="highlightsOut">0</output></div>
+            <input id="highlightsSlider" type="range" min="-60" max="40" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Shadows</span><output id="shadowsOut">0</output></div>
+            <input id="shadowsSlider" type="range" min="-40" max="60" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-top"><span>Vignette</span><output id="vignetteOut">0</output></div>
+            <input id="vignetteSlider" type="range" min="-30" max="70" value="0">
+          </div>
+        </div>
+
+        <div class="group">
+          <label class="label">Frame color</label>
+          <div class="frame-swatches" id="frameSwatches">
+            <button class="frame-swatch active" data-frame="cream" type="button">
+              <i></i><span>Cream</span>
+            </button>
+            <button class="frame-swatch" data-frame="black" type="button">
+              <i></i><span>Black</span>
+            </button>
+            <button class="frame-swatch" data-frame="blush" type="button">
+              <i></i><span>Blush</span>
+            </button>
+            <button class="frame-swatch" data-frame="mocha" type="button">
+              <i></i><span>Mocha</span>
+            </button>
+            <button class="frame-swatch" data-frame="sage" type="button">
+              <i></i><span>Sage</span>
+            </button>
+            <button class="frame-swatch" data-frame="blue" type="button">
+              <i></i><span>Dusty Blue</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label class="label">Film extras</label>
+          <div class="switch-grid">
+            <label class="switch-card"><span>Dust</span><input id="dustToggle" type="checkbox"></label>
+            <label class="switch-card"><span>Halation</span><input id="halationToggle" type="checkbox" checked></label>
+            <label class="switch-card"><span>Light leak</span><input id="lightLeakToggle" type="checkbox"></label>
+            <label class="switch-card"><span>Paper texture</span><input id="paperToggle" type="checkbox" checked></label>
+          </div>
+        </div>
+
+        <div class="lab-actions">
+          <button class="btn primary" id="finishButton">print strip</button>
+          <button class="btn ghost" id="resetAdjustmentsButton">reset edits</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<section class="result hidden" id="resultScreen">
+  <div class="result-inner">
+    <div class="printer">
+      <div class="machine"><span>LITTLE BOOTH / PRINT 01</span></div>
+      <img id="finalStrip" alt="Finished photo strip">
+    </div>
+
+    <div class="result-copy">
+      <div class="kicker">print complete</div>
+      <h2>keep this<br>one.</h2>
+      <p>Your final strip is ready. Save it, send it, or head back to the film lab and try another look.</p>
+
+      <div class="result-actions">
+        <button class="btn primary" id="saveButton">save strip</button>
+        <button class="btn ghost" id="backToLabButton">back to lab</button>
+        <button class="btn ghost" id="homeButton">home</button>
       </div>
+
+      <div class="saved" id="savedMessage">saved successfully ♡</div>
     </div>
-    <div class="group"><label class="label">Frames</label><div class="segment"><button data-count="2">2</button><button data-count="3" class="active">3</button><button data-count="4">4</button><button data-count="6">6</button></div></div>
-    <div class="group"><label class="label">Strip note</label><select id="template">
-      <option value="classic">little booth</option><option value="birthday">birthday roll</option><option value="date">our little day</option><option value="cafe">coffee afternoon</option><option value="summer">summer roll</option>
-    </select></div>
-    <div class="group">
-      <label class="toggle"><span>date stamp</span><input id="date" type="checkbox" checked></label>
-      <label class="toggle"><span>random light leak</span><input id="leakToggle" type="checkbox" checked></label>
-      <label class="toggle"><span>camera sound</span><input id="sound" type="checkbox" checked></label>
-    </div>
-  </aside>
-</div>
+  </div>
 </section>
 
-<section class="overlay hidden" id="develop"><div class="devcard"><div class="kicker">film lab</div><h2>developing...</h2><p>your strip will be ready in a moment.</p><div class="bar"><i></i></div></div></section>
-
-<section class="result hidden" id="result"><div class="resultin">
-  <div class="printer"><div class="machine"><span>LITTLE BOOTH / PRINT 01</span></div><img id="strip" alt="Finished photo strip"></div>
-  <div class="resultcopy"><div class="kicker">finished roll</div><h2>your strip<br>is ready.</h2><p>Save it, send it, or go back for another round.</p>
-  <div class="actions"><button class="btn primary" id="save">save strip</button><button class="btn ghost" id="again">take another</button><button class="btn ghost" id="home">home</button></div>
-  <div class="saved" id="saved">saved successfully ♡</div></div>
-</div></section>
-
-<canvas id="canvas" class="hidden"></canvas><div class="toast" id="toast"></div>
+<canvas id="processingCanvas" class="hidden"></canvas>
+<div class="toast" id="toast"></div>
 
 <script>
 "use strict";
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const el={hero:$("#hero"),app:$("#app"),enter:$("#enter"),camera:$("#camera"),placeholder:$("#placeholder"),dot:$("#dot"),status:$("#status"),shoot:$("#shoot"),flip:$("#flip"),reset:$("#reset"),hint:$("#hint"),count:$("#count"),countNum:$("#countNum"),flash:$("#flash"),progress:$("#progress"),leak:$("#leak"),develop:$("#develop"),result:$("#result"),strip:$("#strip"),canvas:$("#canvas"),save:$("#save"),again:$("#again"),home:$("#home"),saved:$("#saved"),toast:$("#toast"),template:$("#template"),date:$("#date"),leakToggle:$("#leakToggle"),sound:$("#sound")};
-const state={stream:null,facing:"user",ready:false,busy:false,filter:"grd",count:3,photos:[],url:"",audio:null};
-const looks={
-grd:{
-  css:"filter-grd",
-  filter:"contrast(84%) brightness(104%) saturate(76%) sepia(9%) hue-rotate(-4deg)",
-  mode:"classic",
-  grain:.022,
-  vignette:.075,
-  bloom:.075,
-  warmth:.055,
-  fade:.105,
-  highlightRoll:.20,
-  shadowLift:.16,
-  saturation:.82,
-  clarity:.94
-},
-"grd-night":{
-  css:"filter-grd-night",
-  filter:"contrast(82%) brightness(96%) saturate(78%) sepia(11%) hue-rotate(-5deg)",
-  mode:"night",
-  grain:.028,
-  vignette:.12,
-  bloom:.09,
-  warmth:.075,
-  fade:.12,
-  highlightRoll:.24,
-  shadowLift:.20,
-  saturation:.84,
-  clarity:.93
-},
-"grd-flash":{
-  css:"filter-grd-flash",
-  filter:"contrast(86%) brightness(111%) saturate(81%) sepia(8%) hue-rotate(-3deg)",
-  mode:"flash",
-  grain:.018,
-  vignette:.065,
-  bloom:.14,
-  warmth:.048,
-  fade:.085,
-  highlightRoll:.30,
-  shadowLift:.10,
-  saturation:.86,
-  clarity:.92
-},
-"grd-mono":{
-  css:"filter-grd-mono",
-  filter:"grayscale(100%) sepia(18%) contrast(87%) brightness(106%)",
-  mode:"mono",
-  grain:.032,
-  vignette:.09,
-  bloom:.055,
-  warmth:.03,
-  fade:.12,
-  highlightRoll:.22,
-  shadowLift:.18,
-  saturation:0,
-  clarity:.95
-},
-diary:{
-  css:"filter-diary",
-  filter:"sepia(12%) saturate(74%) contrast(82%) brightness(106%) hue-rotate(-9deg)",
-  mode:"diary",
-  grain:.035,
-  vignette:.095,
-  bloom:.065,
-  warmth:.025,
-  fade:.14,
-  highlightRoll:.18,
-  shadowLift:.18,
-  saturation:.76,
-  clarity:.92
-},
-"soft-film":{
-  css:"filter-soft-film",
-  filter:"sepia(12%) saturate(72%) contrast(80%) brightness(108%)",
-  mode:"soft",
-  grain:.025,
-  vignette:.06,
-  bloom:.13,
-  warmth:.07,
-  fade:.15,
-  highlightRoll:.28,
-  shadowLift:.14,
-  saturation:.79,
-  clarity:.90
-}
+
+const $=selector=>document.querySelector(selector);
+const $$=selector=>[...document.querySelectorAll(selector)];
+
+const el={
+  heroScreen:$("#heroScreen"),
+  cameraScreen:$("#cameraScreen"),
+  developingScreen:$("#developingScreen"),
+  labScreen:$("#labScreen"),
+  resultScreen:$("#resultScreen"),
+
+  enterButton:$("#enterButton"),
+  themeButton:$("#themeButton"),
+
+  camera:$("#camera"),
+  cameraPlaceholder:$("#cameraPlaceholder"),
+  statusDot:$("#statusDot"),
+  cameraStatus:$("#cameraStatus"),
+  cameraHint:$("#cameraHint"),
+  shotProgress:$("#shotProgress"),
+  countdown:$("#countdown"),
+  countdownNumber:$("#countdownNumber"),
+  flash:$("#flash"),
+  previewLeak:$("#previewLeak"),
+
+  flipButton:$("#flipButton"),
+  shootButton:$("#shootButton"),
+  resetButton:$("#resetButton"),
+  previewSelect:$("#previewSelect"),
+  templateSelect:$("#templateSelect"),
+  dateToggle:$("#dateToggle"),
+  soundToggle:$("#soundToggle"),
+
+  labStrip:$("#labStrip"),
+  photoThumbs:$("#photoThumbs"),
+  retakeButton:$("#retakeButton"),
+  finishButton:$("#finishButton"),
+  resetAdjustmentsButton:$("#resetAdjustmentsButton"),
+  editStatus:$("#editStatus"),
+
+  warmthSlider:$("#warmthSlider"),
+  fadeSlider:$("#fadeSlider"),
+  grainSlider:$("#grainSlider"),
+  bloomSlider:$("#bloomSlider"),
+  contrastSlider:$("#contrastSlider"),
+  highlightsSlider:$("#highlightsSlider"),
+  shadowsSlider:$("#shadowsSlider"),
+  vignetteSlider:$("#vignetteSlider"),
+
+  warmthOut:$("#warmthOut"),
+  fadeOut:$("#fadeOut"),
+  grainOut:$("#grainOut"),
+  bloomOut:$("#bloomOut"),
+  contrastOut:$("#contrastOut"),
+  highlightsOut:$("#highlightsOut"),
+  shadowsOut:$("#shadowsOut"),
+  vignetteOut:$("#vignetteOut"),
+
+  dustToggle:$("#dustToggle"),
+  halationToggle:$("#halationToggle"),
+  lightLeakToggle:$("#lightLeakToggle"),
+  paperToggle:$("#paperToggle"),
+  frameSwatches:$("#frameSwatches"),
+
+  finalStrip:$("#finalStrip"),
+  saveButton:$("#saveButton"),
+  backToLabButton:$("#backToLabButton"),
+  homeButton:$("#homeButton"),
+  savedMessage:$("#savedMessage"),
+
+  processingCanvas:$("#processingCanvas"),
+  toast:$("#toast")
 };
-const templates={classic:["18","little booth","by Bianca Githa"],birthday:["22","birthday roll","another year of you"],date:["02","our little day","just us"],cafe:["11","coffee afternoon","slow hours"],summer:["07","summer roll","warm days"]};
 
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-function toast(msg){el.toast.textContent=msg;el.toast.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.toast.classList.remove("on"),3500)}
-function renderProgress(done=0){el.progress.innerHTML="";for(let i=0;i<state.count;i++){const d=document.createElement("i");if(i<done)d.classList.add("done");el.progress.appendChild(d)}}
-function lock(v){state.busy=v;el.shoot.disabled=v||!state.ready;el.flip.disabled=v||!state.ready;$$(".filter,.segment button").forEach(b=>b.disabled=v)}
-function setLook(name){if(state.busy)return;state.filter=name;$$(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===name));el.camera.className=looks[name].css;randomLeak()}
-function randomLeak(){el.leak.classList.toggle("on",el.leakToggle.checked&&Math.random()>.45)}
-async function startCamera(){stopCamera();try{state.stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1080}}});el.camera.srcObject=state.stream;await el.camera.play();state.ready=true;el.placeholder.classList.add("hidden");el.shoot.disabled=false;el.flip.disabled=false;el.dot.classList.add("on");el.status.textContent="camera ready";el.hint.textContent=`ready for ${state.count} frames`}catch(e){state.ready=false;el.status.textContent="permission needed";toast("Allow camera access and open this page with Live Server or HTTPS.")}}
-function stopCamera(){if(state.stream)state.stream.getTracks().forEach(t=>t.stop());state.stream=null;state.ready=false}
-async function countdown(){el.count.classList.remove("hidden");for(const n of [3,2,1]){el.countNum.textContent=n;el.countNum.style.animation="none";void el.countNum.offsetWidth;el.countNum.style.animation="pop .9s";beep(n===1?760:560,.08,.045);await wait(900)}el.count.classList.add("hidden")}
-function flash(){el.flash.classList.remove("go");void el.flash.offsetWidth;el.flash.classList.add("go");shutterSound()}
-function cropInfo(v){const r=4/3,sw=v.videoWidth,sh=v.videoHeight;let cw,ch,cx,cy;if(sw/sh>r){ch=sh;cw=ch*r;cx=(sw-cw)/2;cy=0}else{cw=sw;ch=cw/r;cx=0;cy=(sh-ch)/2}return{cw,ch,cx,cy}}
-function capture(){const v=el.camera,{cw,ch,cx,cy}=cropInfo(v),c=document.createElement("canvas"),x=c.getContext("2d",{alpha:false});c.width=1400;c.height=1050;x.save();if(state.facing==="user"){x.translate(c.width,0);x.scale(-1,1)}x.filter=looks[state.filter].filter;x.drawImage(v,cx,cy,cw,ch,0,0,c.width,c.height);x.restore();effects(x,c.width,c.height,looks[state.filter]);return c.toDataURL("image/jpeg",.96)}
-function effects(x,w,h,o){
-  const img=x.getImageData(0,0,w,h);
-  const p=img.data;
-  const out=new Uint8ClampedArray(p.length);
+const state={
+  stream:null,
+  facing:"user",
+  ready:false,
+  busy:false,
+  count:3,
+  photos:[],
+  preset:"grdClassic",
+  labURL:"",
+  finalURL:"",
+  audio:null,
+  previewTimer:null,
+  previewRenderId:0,
+  previewBusy:false,
+  frame:"cream"
+};
 
-  const clamp=v=>Math.max(0,Math.min(1,v));
-  const smoothstep=(a,b,v)=>{
-    const t=clamp((v-a)/(b-a));
-    return t*t*(3-2*t);
-  };
+const templates={
+  classic:["18","little booth","tiny memories to keep"],
+  birthday:["22","birthday roll","another year of you"],
+  date:["02","our little day","just us"],
+  cafe:["11","coffee afternoon","slow hours"],
+  summer:["07","summer roll","warm days"]
+};
 
-  // Soft local averaging pass. This lowers digital harshness without visible blur.
-  const sample=(xx,yy,c)=>{
-    xx=Math.max(0,Math.min(w-1,xx));
-    yy=Math.max(0,Math.min(h-1,yy));
-    return p[(yy*w+xx)*4+c]/255;
-  };
+const frameThemes={
+  cream:{
+    start:"#f0e8dc",
+    middle:"#e5dbcf",
+    end:"#d5c8b8",
+    ink:"#332d27",
+    border:"rgba(50,39,30,.16)",
+    photoMat:"#b9aa99"
+  },
+  black:{
+    start:"#302d29",
+    middle:"#23201d",
+    end:"#151311",
+    ink:"#f0e7dc",
+    border:"rgba(255,245,232,.17)",
+    photoMat:"#0e0d0c"
+  },
+  blush:{
+    start:"#eadbd8",
+    middle:"#ddc7c4",
+    end:"#c5aaa7",
+    ink:"#4e3737",
+    border:"rgba(83,52,52,.17)",
+    photoMat:"#b59291"
+  },
+  mocha:{
+    start:"#b9a18c",
+    middle:"#9b7f69",
+    end:"#725846",
+    ink:"#f6ede3",
+    border:"rgba(255,244,231,.16)",
+    photoMat:"#574235"
+  },
+  sage:{
+    start:"#d0d3c4",
+    middle:"#b4baa7",
+    end:"#8e967e",
+    ink:"#31382d",
+    border:"rgba(42,51,38,.17)",
+    photoMat:"#78806b"
+  },
+  blue:{
+    start:"#d3dadd",
+    middle:"#b1c0c4",
+    end:"#84989e",
+    ink:"#28363b",
+    border:"rgba(37,53,59,.17)",
+    photoMat:"#71868c"
+  }
+};
 
-  for(let y=0;y<h;y++){
-    for(let xx=0;xx<w;xx++){
-      const i=(y*w+xx)*4;
+const presets={
+  grdClassic:{
+    name:"GRD 01",
+    mode:"color",
+    saturation:.82,
+    warmth:.060,
+    fade:.120,
+    contrast:-.10,
+    highlights:-.27,
+    shadows:.20,
+    grain:.017,
+    bloom:.095,
+    vignette:.055,
+    clarity:.90,
+    orangeKeep:.050,
+    greenMute:.045,
+    dust:false,
+    halation:true,
+    lightLeak:false
+  },
+  grdNight:{
+    name:"GRD 02",
+    mode:"night",
+    saturation:.84,
+    warmth:.088,
+    fade:.145,
+    contrast:-.14,
+    highlights:-.32,
+    shadows:.28,
+    grain:.021,
+    bloom:.110,
+    vignette:.080,
+    clarity:.89,
+    orangeKeep:.075,
+    greenMute:.040,
+    dust:false,
+    halation:true,
+    lightLeak:false
+  },
+  grdFlash:{
+    name:"GRD 03",
+    mode:"flash",
+    saturation:.86,
+    warmth:.058,
+    fade:.090,
+    contrast:-.08,
+    highlights:-.38,
+    shadows:.12,
+    grain:.013,
+    bloom:.165,
+    vignette:.045,
+    clarity:.88,
+    orangeKeep:.060,
+    greenMute:.030,
+    dust:false,
+    halation:true,
+    lightLeak:false
+  },
+  grdMono:{
+    name:"GRD B&W",
+    mode:"mono",
+    saturation:0,
+    warmth:.030,
+    fade:.150,
+    contrast:-.12,
+    highlights:-.30,
+    shadows:.22,
+    grain:.025,
+    bloom:.070,
+    vignette:.060,
+    clarity:.91,
+    orangeKeep:0,
+    greenMute:0,
+    dust:false,
+    halation:true,
+    lightLeak:false
+  },
+  portra:{
+    name:"Portra Soft",
+    mode:"portra",
+    saturation:.88,
+    warmth:.075,
+    fade:.115,
+    contrast:-.08,
+    highlights:-.25,
+    shadows:.15,
+    grain:.025,
+    bloom:.100,
+    vignette:.045,
+    clarity:.89,
+    orangeKeep:.070,
+    greenMute:.035,
+    dust:false,
+    halation:true,
+    lightLeak:false
+  },
+  cafe:{
+    name:"Café",
+    mode:"cafe",
+    saturation:.80,
+    warmth:.100,
+    fade:.155,
+    contrast:-.15,
+    highlights:-.30,
+    shadows:.23,
+    grain:.028,
+    bloom:.110,
+    vignette:.090,
+    clarity:.87,
+    orangeKeep:.080,
+    greenMute:.060,
+    dust:false,
+    halation:true,
+    lightLeak:false
+  },
+  disposable:{
+    name:"Disposable",
+    mode:"disposable",
+    saturation:.94,
+    warmth:.070,
+    fade:.100,
+    contrast:.02,
+    highlights:-.18,
+    shadows:.08,
+    grain:.070,
+    bloom:.165,
+    vignette:.130,
+    clarity:.84,
+    orangeKeep:.070,
+    greenMute:.020,
+    dust:true,
+    halation:true,
+    lightLeak:true
+  },
+  photoBooth:{
+    name:"Booth B&W",
+    mode:"booth",
+    saturation:0,
+    warmth:.040,
+    fade:.170,
+    contrast:-.06,
+    highlights:-.22,
+    shadows:.18,
+    grain:.050,
+    bloom:.055,
+    vignette:.090,
+    clarity:.90,
+    orangeKeep:0,
+    greenMute:0,
+    dust:true,
+    halation:false,
+    lightLeak:false
+  }
+};
 
-      let r=p[i]/255;
-      let g=p[i+1]/255;
-      let b=p[i+2]/255;
+const sliders={
+  warmth:{el:el.warmthSlider,out:el.warmthOut,scale:.0030},
+  fade:{el:el.fadeSlider,out:el.fadeOut,scale:.0026},
+  grain:{el:el.grainSlider,out:el.grainOut,scale:.0016},
+  bloom:{el:el.bloomSlider,out:el.bloomOut,scale:.0030},
+  contrast:{el:el.contrastSlider,out:el.contrastOut,scale:.0050},
+  highlights:{el:el.highlightsSlider,out:el.highlightsOut,scale:.0050},
+  shadows:{el:el.shadowsSlider,out:el.shadowsOut,scale:.0050},
+  vignette:{el:el.vignetteSlider,out:el.vignetteOut,scale:.0030}
+};
 
-      const avgR=(sample(xx-1,y,0)+sample(xx+1,y,0)+sample(xx,y-1,0)+sample(xx,y+1,0)+r*4)/8;
-      const avgG=(sample(xx-1,y,1)+sample(xx+1,y,1)+sample(xx,y-1,1)+sample(xx,y+1,1)+g*4)/8;
-      const avgB=(sample(xx-1,y,2)+sample(xx+1,y,2)+sample(xx,y-1,2)+sample(xx,y+1,2)+b*4)/8;
+function clamp(value,min=0,max=1){
+  return Math.max(min,Math.min(max,value));
+}
 
-      r=r*o.clarity+avgR*(1-o.clarity);
-      g=g*o.clarity+avgG*(1-o.clarity);
-      b=b*o.clarity+avgB*(1-o.clarity);
+function wait(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
 
-      let lum=.2126*r+.7152*g+.0722*b;
+function showToast(message){
+  el.toast.textContent=message;
+  el.toast.classList.add("on");
+  clearTimeout(showToast.timer);
+  showToast.timer=setTimeout(()=>el.toast.classList.remove("on"),3500);
+}
 
-      // Gentle global desaturation while keeping skin/orange drinks alive.
-      const sat=o.saturation;
-      r=lum+(r-lum)*sat;
-      g=lum+(g-lum)*sat;
-      b=lum+(b-lum)*sat;
+function renderProgress(done=0){
+  el.shotProgress.innerHTML="";
+  for(let index=0;index<state.count;index+=1){
+    const dot=document.createElement("i");
+    if(index<done)dot.classList.add("done");
+    el.shotProgress.appendChild(dot);
+  }
+}
 
-      // Lift dark tones, flatten mids, and roll bright highlights smoothly.
-      const lift=o.shadowLift*(1-smoothstep(.10,.52,lum));
-      r+=lift*.16;
-      g+=lift*.17;
-      b+=lift*.18;
+function lockCamera(locked){
+  state.busy=locked;
+  el.shootButton.disabled=locked||!state.ready;
+  el.flipButton.disabled=locked||!state.ready;
+  $$(".segment button").forEach(button=>button.disabled=locked);
+}
 
-      const roll=smoothstep(.58,1,lum)*o.highlightRoll;
-      r-=roll*(r-.78)*.50;
-      g-=roll*(g-.76)*.54;
-      b-=roll*(b-.72)*.60;
+async function startCamera(){
+  stopCamera();
 
-      // Matte black floor.
-      r=r*(1-o.fade)+o.fade*.10;
-      g=g*(1-o.fade)+o.fade*.095;
-      b=b*(1-o.fade)+o.fade*.09;
+  el.cameraStatus.textContent="requesting permission";
 
-      // Warm yellow balance rather than orange.
-      const warm=o.warmth;
-      r+=warm*.36;
-      g+=warm*.20;
-      b-=warm*.20;
-
-      lum=.2126*r+.7152*g+.0722*b;
-      const shadows=1-smoothstep(.12,.55,lum);
-      const highs=smoothstep(.52,.92,lum);
-      const mids=1-Math.min(1,Math.abs(lum-.52)*2.05);
-
-      // Subtle olive/cyan shadows, creamy yellow highlights.
-      r+=highs*.012-shadows*.010;
-      g+=shadows*.012+highs*.006+mids*.004;
-      b+=shadows*.014-highs*.018-mids*.006;
-
-      // Keep oranges warm and muted, greens deep but not neon.
-      const max=Math.max(r,g,b),min=Math.min(r,g,b);
-      const chroma=max-min;
-      const isOrange=r>g&&g>b&&chroma>.06;
-      const isGreen=g>r&&g>b&&chroma>.05;
-
-      if(isOrange){
-        r+=.010;
-        g+=.004;
-        b-=.010;
+  try{
+    state.stream=await navigator.mediaDevices.getUserMedia({
+      audio:false,
+      video:{
+        facingMode:{ideal:state.facing},
+        width:{ideal:1920},
+        height:{ideal:1080}
       }
-      if(isGreen){
-        r-=.010;
-        g-=.004;
-        b-=.014;
-      }
+    });
 
-      // Black & white with warm paper tone.
-      if(o.mode==="mono"){
-        const gray=.24*r+.68*g+.08*b;
-        r=gray*1.015+.012;
-        g=gray*.995+.006;
-        b=gray*.965;
-      }
+    el.camera.srcObject=state.stream;
+    await el.camera.play();
 
-      // Flash mode: brighter subject-like mids, controlled whites.
-      if(o.mode==="flash"){
-        const flashMid=smoothstep(.26,.72,lum)*(1-smoothstep(.72,.96,lum));
-        r+=flashMid*.030;
-        g+=flashMid*.023;
-        b+=flashMid*.018;
-      }
+    state.ready=true;
+    el.cameraPlaceholder.classList.add("hidden");
+    el.statusDot.classList.add("on");
+    el.cameraStatus.textContent="camera ready";
+    el.shootButton.disabled=false;
+    el.flipButton.disabled=false;
+    el.cameraHint.textContent=`ready for ${state.count} frames`;
+  }catch(error){
+    console.error(error);
+    state.ready=false;
+    el.cameraStatus.textContent="permission needed";
+    showToast("Allow camera access and open the page with Live Server or HTTPS.");
+  }
+}
 
-      // Night mode: retain warm lamps while keeping dark areas visible.
-      if(o.mode==="night"){
-        const dark=1-smoothstep(.08,.48,lum);
-        r+=dark*.012;
-        g+=dark*.010;
-        b+=dark*.007;
-      }
+function stopCamera(){
+  if(state.stream){
+    state.stream.getTracks().forEach(track=>track.stop());
+  }
+  state.stream=null;
+  state.ready=false;
+}
 
-      // Diary mode gets a faint green cast.
-      if(o.mode==="diary"){
-        g+=.008;
-        b-=.006;
-      }
+async function runCountdown(){
+  el.countdown.classList.remove("hidden");
 
-      // Tiny luminance grain only—no harsh RGB noise.
-      const n=(Math.random()-.5)*o.grain;
-      r+=n;
-      g+=n*.92;
-      b+=n*.86;
+  for(const number of [3,2,1]){
+    el.countdownNumber.textContent=number;
+    el.countdownNumber.style.animation="none";
+    void el.countdownNumber.offsetWidth;
+    el.countdownNumber.style.animation="countPop .9s";
+    beep(number===1?760:560,.08,.04);
+    await wait(900);
+  }
 
-      out[i]=clamp(r)*255;
-      out[i+1]=clamp(g)*255;
-      out[i+2]=clamp(b)*255;
-      out[i+3]=255;
+  el.countdown.classList.add("hidden");
+}
+
+function triggerFlash(){
+  el.flash.classList.remove("go");
+  void el.flash.offsetWidth;
+  el.flash.classList.add("go");
+  shutterSound();
+}
+
+function cropInfo(video){
+  const targetRatio=4/3;
+  const sourceWidth=video.videoWidth;
+  const sourceHeight=video.videoHeight;
+
+  let cropWidth;
+  let cropHeight;
+  let cropX;
+  let cropY;
+
+  if(sourceWidth/sourceHeight>targetRatio){
+    cropHeight=sourceHeight;
+    cropWidth=cropHeight*targetRatio;
+    cropX=(sourceWidth-cropWidth)/2;
+    cropY=0;
+  }else{
+    cropWidth=sourceWidth;
+    cropHeight=cropWidth/targetRatio;
+    cropX=0;
+    cropY=(sourceHeight-cropHeight)/2;
+  }
+
+  return{cropWidth,cropHeight,cropX,cropY};
+}
+
+function captureRawFrame(){
+  const video=el.camera;
+  const {cropWidth,cropHeight,cropX,cropY}=cropInfo(video);
+
+  const canvas=document.createElement("canvas");
+  const context=canvas.getContext("2d",{alpha:false});
+
+  canvas.width=1400;
+  canvas.height=1050;
+
+  context.save();
+
+  if(state.facing==="user"){
+    context.translate(canvas.width,0);
+    context.scale(-1,1);
+  }
+
+  context.drawImage(
+    video,
+    cropX,
+    cropY,
+    cropWidth,
+    cropHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  context.restore();
+
+  return canvas.toDataURL("image/jpeg",.97);
+}
+
+async function shootSequence(){
+  if(!state.ready||state.busy)return;
+
+  initializeAudio();
+  state.photos=[];
+  lockCamera(true);
+  renderProgress();
+
+  for(let index=0;index<state.count;index+=1){
+    el.cameraHint.textContent=`frame ${index+1} of ${state.count}`;
+
+    await runCountdown();
+    triggerFlash();
+
+    state.photos.push(captureRawFrame());
+    renderProgress(index+1);
+
+    if(index<state.count-1){
+      await wait(1050);
     }
   }
 
-  img.data.set(out);
-  x.putImageData(img,0,0);
+  el.developingScreen.classList.remove("hidden");
+  printSound();
 
-  // Soft creamy bloom around bright areas.
-  const bloom=x.createRadialGradient(w*.5,h*.40,0,w*.5,h*.40,w*.78);
-  bloom.addColorStop(0,`rgba(255,239,211,${o.bloom*.34})`);
-  bloom.addColorStop(.45,`rgba(255,217,178,${o.bloom*.10})`);
-  bloom.addColorStop(1,"rgba(255,255,255,0)");
-  x.save();
-  x.globalCompositeOperation="screen";
-  x.fillStyle=bloom;
-  x.fillRect(0,0,w,h);
-  x.restore();
+  await wait(4050);
 
-  // Very light vignette, much cleaner than disposable-film effects.
-  const vig=x.createRadialGradient(w/2,h/2,w*.30,w/2,h/2,w*.78);
-  vig.addColorStop(.58,"rgba(0,0,0,0)");
-  vig.addColorStop(1,`rgba(25,17,11,${o.vignette})`);
-  x.save();
-  x.globalCompositeOperation="multiply";
-  x.fillStyle=vig;
-  x.fillRect(0,0,w,h);
-  x.restore();
+  el.cameraScreen.classList.add("hidden");
+  el.developingScreen.classList.add("hidden");
+  el.labScreen.classList.remove("hidden");
 
-  // Rare, subtle warm edge exposure only.
-  if(el.leakToggle.checked&&Math.random()>.72){
-    const fromLeft=Math.random()>.5;
-    const cx=fromLeft?0:w;
-    const cy=h*(.25+Math.random()*.50);
-    const leak=x.createRadialGradient(cx,cy,0,cx,cy,w*.48);
-    leak.addColorStop(0,"rgba(255,108,34,.16)");
-    leak.addColorStop(.42,"rgba(255,173,88,.07)");
+  stopCamera();
+  renderThumbs();
+  await renderLabPreview();
+}
+
+function renderThumbs(){
+  el.photoThumbs.innerHTML="";
+
+  state.photos.forEach((src,index)=>{
+    const wrap=document.createElement("div");
+    wrap.className="photo-thumb";
+
+    const image=document.createElement("img");
+    image.src=src;
+    image.alt=`Captured frame ${index+1}`;
+
+    wrap.appendChild(image);
+    el.photoThumbs.appendChild(wrap);
+  });
+}
+
+function currentSettings(){
+  const base={...presets[state.preset]};
+
+  base.warmth=clamp(base.warmth+Number(el.warmthSlider.value)*sliders.warmth.scale,-.10,.20);
+  base.fade=clamp(base.fade+Number(el.fadeSlider.value)*sliders.fade.scale,0,.30);
+  base.grain=clamp(base.grain+Number(el.grainSlider.value)*sliders.grain.scale,0,.14);
+  base.bloom=clamp(base.bloom+Number(el.bloomSlider.value)*sliders.bloom.scale,0,.30);
+  base.contrast=clamp(base.contrast+Number(el.contrastSlider.value)*sliders.contrast.scale,-.35,.35);
+  base.highlights=clamp(base.highlights+Number(el.highlightsSlider.value)*sliders.highlights.scale,-.55,.25);
+  base.shadows=clamp(base.shadows+Number(el.shadowsSlider.value)*sliders.shadows.scale,-.30,.45);
+  base.vignette=clamp(base.vignette+Number(el.vignetteSlider.value)*sliders.vignette.scale,0,.22);
+
+  base.dust=el.dustToggle.checked;
+  base.halation=el.halationToggle.checked;
+  base.lightLeak=el.lightLeakToggle.checked;
+
+  return base;
+}
+
+function loadImage(src){
+  return new Promise((resolve,reject)=>{
+    const image=new Image();
+    image.onload=()=>resolve(image);
+    image.onerror=reject;
+    image.src=src;
+  });
+}
+
+function smoothstep(a,b,value){
+  const t=clamp((value-a)/(b-a));
+  return t*t*(3-2*t);
+}
+
+function processImageData(context,width,height,settings){
+  const imageData=context.getImageData(0,0,width,height);
+  const source=imageData.data;
+  const output=new Uint8ClampedArray(source.length);
+
+  const sample=(x,y,channel)=>{
+    x=Math.max(0,Math.min(width-1,x));
+    y=Math.max(0,Math.min(height-1,y));
+    return source[(y*width+x)*4+channel]/255;
+  };
+
+  for(let y=0;y<height;y+=1){
+    for(let x=0;x<width;x+=1){
+      const index=(y*width+x)*4;
+
+      let r=source[index]/255;
+      let g=source[index+1]/255;
+      let b=source[index+2]/255;
+
+      const averageR=(
+        sample(x-1,y,0)+sample(x+1,y,0)+
+        sample(x,y-1,0)+sample(x,y+1,0)+
+        r*6
+      )/10;
+
+      const averageG=(
+        sample(x-1,y,1)+sample(x+1,y,1)+
+        sample(x,y-1,1)+sample(x,y+1,1)+
+        g*6
+      )/10;
+
+      const averageB=(
+        sample(x-1,y,2)+sample(x+1,y,2)+
+        sample(x,y-1,2)+sample(x,y+1,2)+
+        b*6
+      )/10;
+
+      r=r*settings.clarity+averageR*(1-settings.clarity);
+      g=g*settings.clarity+averageG*(1-settings.clarity);
+      b=b*settings.clarity+averageB*(1-settings.clarity);
+
+      let luminance=.2126*r+.7152*g+.0722*b;
+
+      r=luminance+(r-luminance)*settings.saturation;
+      g=luminance+(g-luminance)*settings.saturation;
+      b=luminance+(b-luminance)*settings.saturation;
+
+      const contrastFactor=1+settings.contrast;
+      r=(r-.5)*contrastFactor+.5;
+      g=(g-.5)*contrastFactor+.5;
+      b=(b-.5)*contrastFactor+.5;
+
+      luminance=.2126*r+.7152*g+.0722*b;
+
+      const shadowMask=1-smoothstep(.08,.56,luminance);
+      const highlightMask=smoothstep(.56,.98,luminance);
+      const midMask=1-Math.min(1,Math.abs(luminance-.50)*2.0);
+
+      r+=shadowMask*settings.shadows*.16;
+      g+=shadowMask*settings.shadows*.17;
+      b+=shadowMask*settings.shadows*.18;
+
+      const highlightAmount=-settings.highlights;
+      r-=highlightMask*highlightAmount*(r-.78)*.52;
+      g-=highlightMask*highlightAmount*(g-.75)*.58;
+      b-=highlightMask*highlightAmount*(b-.70)*.65;
+
+      r=r*(1-settings.fade)+settings.fade*.105;
+      g=g*(1-settings.fade)+settings.fade*.100;
+      b=b*(1-settings.fade)+settings.fade*.094;
+
+      r+=settings.warmth*.34;
+      g+=settings.warmth*.22;
+      b-=settings.warmth*.18;
+
+      luminance=.2126*r+.7152*g+.0722*b;
+
+      const maximum=Math.max(r,g,b);
+      const minimum=Math.min(r,g,b);
+      const chroma=maximum-minimum;
+      const orange=r>g&&g>b&&chroma>.04;
+      const green=g>r&&g>b&&chroma>.04;
+
+      if(orange){
+        r+=settings.orangeKeep;
+        g+=settings.orangeKeep*.45;
+        b-=settings.orangeKeep*.28;
+      }
+
+      if(green){
+        r-=settings.greenMute*.20;
+        g-=settings.greenMute*.08;
+        b-=settings.greenMute*.30;
+      }
+
+      if(settings.mode==="night"){
+        const darkMask=1-smoothstep(.06,.50,luminance);
+        r+=darkMask*.014;
+        g+=darkMask*.012;
+        b+=darkMask*.010;
+      }
+
+      if(settings.mode==="flash"){
+        const flashMask=smoothstep(.22,.72,luminance)*(1-smoothstep(.72,.98,luminance));
+        r+=flashMask*.034;
+        g+=flashMask*.026;
+        b+=flashMask*.018;
+      }
+
+      if(settings.mode==="portra"){
+        r+=midMask*.012;
+        g+=midMask*.004;
+        b-=midMask*.009;
+      }
+
+      if(settings.mode==="cafe"){
+        r+=shadowMask*.010;
+        g-=shadowMask*.002;
+        b-=shadowMask*.012;
+      }
+
+      if(settings.mode==="disposable"){
+        r+=highlightMask*.012;
+        g+=highlightMask*.004;
+        b-=highlightMask*.010;
+      }
+
+      if(settings.mode==="mono"||settings.mode==="booth"){
+        const gray=.25*r+.67*g+.08*b;
+        r=gray*1.018+.010;
+        g=gray*.997+.006;
+        b=gray*.965;
+      }
+
+      const noise=(Math.random()-.5)*settings.grain;
+      r+=noise;
+      g+=noise*.94;
+      b+=noise*.90;
+
+      output[index]=clamp(r)*255;
+      output[index+1]=clamp(g)*255;
+      output[index+2]=clamp(b)*255;
+      output[index+3]=255;
+    }
+  }
+
+  imageData.data.set(output);
+  context.putImageData(imageData,0,0);
+
+  if(settings.halation){
+    const bloom=context.createRadialGradient(
+      width*.5,height*.39,0,
+      width*.5,height*.39,width*.80
+    );
+
+    bloom.addColorStop(0,`rgba(255,237,207,${settings.bloom*.30})`);
+    bloom.addColorStop(.40,`rgba(255,205,165,${settings.bloom*.10})`);
+    bloom.addColorStop(1,"rgba(255,255,255,0)");
+
+    context.save();
+    context.globalCompositeOperation="screen";
+    context.fillStyle=bloom;
+    context.fillRect(0,0,width,height);
+    context.restore();
+  }
+
+  if(settings.vignette>0){
+    const vignette=context.createRadialGradient(
+      width/2,height/2,width*.34,
+      width/2,height/2,width*.79
+    );
+
+    vignette.addColorStop(.60,"rgba(0,0,0,0)");
+    vignette.addColorStop(1,`rgba(24,17,12,${settings.vignette})`);
+
+    context.save();
+    context.globalCompositeOperation="multiply";
+    context.fillStyle=vignette;
+    context.fillRect(0,0,width,height);
+    context.restore();
+  }
+
+  if(settings.dust){
+    context.save();
+
+    const dustCount=settings.mode==="disposable"?70:45;
+
+    for(let index=0;index<dustCount;index+=1){
+      context.fillStyle=Math.random()>.45
+        ?`rgba(255,247,230,${.05+Math.random()*.14})`
+        :`rgba(30,22,17,${.03+Math.random()*.10})`;
+
+      context.beginPath();
+      context.arc(
+        Math.random()*width,
+        Math.random()*height,
+        .35+Math.random()*2.0,
+        0,
+        Math.PI*2
+      );
+      context.fill();
+    }
+
+    context.restore();
+  }
+
+  if(settings.lightLeak){
+    const left=Math.random()>.5;
+    const centerX=left?0:width;
+    const centerY=height*(.26+Math.random()*.48);
+
+    const leak=context.createRadialGradient(
+      centerX,centerY,0,
+      centerX,centerY,width*.48
+    );
+
+    leak.addColorStop(0,"rgba(255,109,31,.20)");
+    leak.addColorStop(.38,"rgba(255,174,85,.08)");
     leak.addColorStop(1,"rgba(255,190,100,0)");
-    x.save();
-    x.globalCompositeOperation="screen";
-    x.fillStyle=leak;
-    x.fillRect(0,0,w,h);
-    x.restore();
+
+    context.save();
+    context.globalCompositeOperation="screen";
+    context.fillStyle=leak;
+    context.fillRect(0,0,width,height);
+    context.restore();
   }
 }
-async function shootSequence(){if(!state.ready||state.busy)return;initAudio();state.photos=[];lock(true);renderProgress();for(let i=0;i<state.count;i++){el.hint.textContent=`frame ${i+1} of ${state.count}`;await countdown();flash();state.photos.push(capture());renderProgress(i+1);randomLeak();if(i<state.count-1)await wait(1100)}el.develop.classList.remove("hidden");printSound();await wait(4050);state.url=await buildStrip();el.strip.src=state.url;el.app.classList.add("hidden");el.develop.classList.add("hidden");el.result.classList.remove("hidden");el.strip.classList.remove("printing");void el.strip.offsetWidth;el.strip.classList.add("printing");printSound()}
-function load(src){return new Promise((res,rej)=>{const i=new Image;i.onload=()=>res(i);i.onerror=rej;i.src=src})}
-async function buildStrip(){const scale=2,W=820*scale,pad=50*scale,gap=24*scale,bottom=255*scale,pw=W-pad*2,ph=Math.round(pw*.75),H=pad+state.count*ph+(state.count-1)*gap+bottom,c=el.canvas,x=c.getContext("2d");c.width=W;c.height=H;
- const bg=x.createLinearGradient(0,0,W,H);bg.addColorStop(0,"#eee7dc");bg.addColorStop(.5,"#e4dbcf");bg.addColorStop(1,"#d5c8b8");x.fillStyle=bg;x.fillRect(0,0,W,H);
- for(let i=0;i<state.photos.length;i++){const img=await load(state.photos[i]),y=pad+i*(ph+gap);x.save();x.shadowColor="rgba(45,34,26,.22)";x.shadowBlur=26;x.shadowOffsetY=11;x.fillStyle="#b9aa99";x.fillRect(pad,y,pw,ph);x.restore();x.drawImage(img,pad,y,pw,ph);x.strokeStyle="rgba(34,26,20,.25)";x.lineWidth=3;x.strokeRect(pad+1,y+1,pw-2,ph-2)}
- const [num,title,sub]=templates[el.template.value],fy=H-225*scale,cx=W/2;x.textAlign="center";x.fillStyle="#332d27";x.font=`500 ${26*scale}px DM Mono`;x.fillText(num,cx,fy+25*scale);x.font=`italic ${43*scale}px Instrument Serif`;x.fillText(title,cx,fy+82*scale);x.globalAlpha=.7;x.font=`400 ${13*scale}px DM Mono`;x.fillText(sub,cx,fy+120*scale);if(el.date.checked)x.fillText(new Date().toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"}).replaceAll("/","."),cx,fy+161*scale);x.globalAlpha=.55;x.fillText("BY BIANCA GITHA",cx,fy+202*scale);x.globalAlpha=1;
- const d=x.getImageData(0,0,W,H),p=d.data;for(let i=0;i<p.length;i+=4){const n=(Math.random()-.5)*6;p[i]+=n;p[i+1]+=n;p[i+2]+=n}x.putImageData(d,0,0);x.strokeStyle="rgba(50,39,30,.18)";x.lineWidth=4;x.strokeRect(2,2,W-4,H-4);return c.toDataURL("image/png")}
-function initAudio(){if(!state.audio){const A=window.AudioContext||window.webkitAudioContext;if(A)state.audio=new A}}
-function beep(f=440,d=.1,v=.05,delay=0){if(!el.sound.checked||!state.audio)return;const a=state.audio,o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d)}
-function shutterSound(){beep(120,.07,.07);beep(900,.035,.035,.02)}
-function printSound(){for(let i=0;i<6;i++)beep(90+i*7,.08,.018,i*.11)}
-function reset(){if(state.busy)return;state.photos=[];state.url="";renderProgress();el.hint.textContent=state.ready?`ready for ${state.count} frames`:"allow camera access"}
-$("#enter").onclick=async()=>{el.hero.classList.add("hidden");el.app.classList.remove("hidden");await startCamera()}
-el.shoot.onclick=shootSequence;el.flip.onclick=async()=>{if(state.busy)return;state.facing=state.facing==="user"?"environment":"user";el.camera.style.transform=state.facing==="user"?"scaleX(-1)":"none";await startCamera()};el.reset.onclick=reset;
-$$(".filter").forEach(b=>b.onclick=()=>setLook(b.dataset.filter));$$(".segment button").forEach(b=>b.onclick=()=>{if(state.busy)return;state.count=+b.dataset.count;$$(".segment button").forEach(x=>x.classList.toggle("active",x===b));reset()});
-el.leakToggle.onchange=randomLeak;el.again.onclick=()=>{el.result.classList.add("hidden");el.app.classList.remove("hidden");state.busy=false;lock(false);reset();if(!state.stream)startCamera()};el.home.onclick=()=>{el.result.classList.add("hidden");el.hero.classList.remove("hidden");stopCamera();state.busy=false;reset()};el.save.onclick=()=>{if(!state.url)return;const a=document.createElement("a");a.href=state.url;a.download=`little-booth-${new Date().toISOString().slice(0,10)}.png`;a.click();el.saved.classList.add("on");beep(520,.16,.04);beep(680,.2,.035,.12);setTimeout(()=>el.saved.classList.remove("on"),2600)};
-$("#theme").onclick=()=>document.body.style.filter=document.body.style.filter?"":"contrast(.98) sepia(.08)";
-window.onbeforeunload=stopCamera;setLook("grd");renderProgress();
+
+async function processPhoto(src,settings,preview=false){
+  const image=await loadImage(src);
+  const canvas=document.createElement("canvas");
+  const context=canvas.getContext("2d",{alpha:false});
+
+  // Editing preview is intentionally smaller so sliders react quickly.
+  canvas.width=preview?560:1400;
+  canvas.height=preview?420:1050;
+
+  context.drawImage(image,0,0,canvas.width,canvas.height);
+  processImageData(context,canvas.width,canvas.height,settings);
+
+  return canvas;
+}
+
+function drawPaperBackground(context,width,height,useTexture,theme){
+  const gradient=context.createLinearGradient(0,0,width,height);
+  gradient.addColorStop(0,theme.start);
+  gradient.addColorStop(.52,theme.middle);
+  gradient.addColorStop(1,theme.end);
+
+  context.fillStyle=gradient;
+  context.fillRect(0,0,width,height);
+
+  if(useTexture){
+    for(let index=0;index<22;index+=1){
+      const x=Math.random()*width;
+      const y=Math.random()*height;
+      const radius=60+Math.random()*220;
+
+      const patch=context.createRadialGradient(x,y,0,x,y,radius);
+      patch.addColorStop(0,`rgba(106,79,58,${.005+Math.random()*.013})`);
+      patch.addColorStop(1,"rgba(106,79,58,0)");
+
+      context.fillStyle=patch;
+      context.fillRect(0,0,width,height);
+    }
+  }
+}
+
+function drawFooter(context,width,height,scale,theme){
+  const template=templates[el.templateSelect.value]||templates.classic;
+  const footerTop=height-225*scale;
+  const centerX=width/2;
+
+  context.save();
+  context.textAlign="center";
+  context.fillStyle=theme.ink;
+
+  context.font=`500 ${26*scale}px DM Mono`;
+  context.fillText(template[0],centerX,footerTop+25*scale);
+
+  context.font=`italic ${43*scale}px Instrument Serif`;
+  context.fillText(template[1],centerX,footerTop+82*scale);
+
+  context.globalAlpha=.68;
+  context.font=`400 ${13*scale}px DM Mono`;
+  context.fillText(template[2],centerX,footerTop+120*scale);
+
+  if(el.dateToggle.checked){
+    const date=new Date()
+      .toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"})
+      .replaceAll("/",".");
+
+    context.fillText(date,centerX,footerTop+158*scale);
+  }
+
+  context.globalAlpha=.58;
+  context.font=`500 ${11*scale}px DM Mono`;
+  context.fillText("BY BIANCA GITHA",centerX,footerTop+198*scale);
+
+  context.restore();
+}
+
+function addPaperTexture(context,width,height){
+  const imageData=context.getImageData(0,0,width,height);
+  const pixels=imageData.data;
+
+  for(let index=0;index<pixels.length;index+=4){
+    const noise=(Math.random()-.5)*5;
+    pixels[index]=clamp(pixels[index]+noise,0,255);
+    pixels[index+1]=clamp(pixels[index+1]+noise,0,255);
+    pixels[index+2]=clamp(pixels[index+2]+noise,0,255);
+  }
+
+  context.putImageData(imageData,0,0);
+}
+
+async function buildStrip(settings,preview=false){
+  const scale=preview?1:2;
+  const stripWidth=820*scale;
+  const sidePadding=50*scale;
+  const topPadding=50*scale;
+  const photoGap=24*scale;
+  const footerHeight=255*scale;
+
+  const photoWidth=stripWidth-sidePadding*2;
+  const photoHeight=Math.round(photoWidth*.75);
+
+  const stripHeight=
+    topPadding+
+    state.count*photoHeight+
+    (state.count-1)*photoGap+
+    footerHeight;
+
+  const canvas=document.createElement("canvas");
+  const context=canvas.getContext("2d",{alpha:false});
+
+  canvas.width=stripWidth;
+  canvas.height=stripHeight;
+
+  const frameTheme=frameThemes[state.frame]||frameThemes.cream;
+
+  drawPaperBackground(
+    context,
+    stripWidth,
+    stripHeight,
+    el.paperToggle.checked,
+    frameTheme
+  );
+
+  for(let index=0;index<state.photos.length;index+=1){
+    const processed=await processPhoto(state.photos[index],settings,preview);
+    const x=sidePadding;
+    const y=topPadding+index*(photoHeight+photoGap);
+
+    context.save();
+    context.shadowColor="rgba(45,34,26,.22)";
+    context.shadowBlur=24*scale;
+    context.shadowOffsetY=10*scale;
+    context.fillStyle=frameTheme.photoMat;
+    context.fillRect(x,y,photoWidth,photoHeight);
+    context.restore();
+
+    context.drawImage(
+      processed,
+      x,
+      y,
+      photoWidth,
+      photoHeight
+    );
+
+    context.strokeStyle="rgba(34,26,20,.22)";
+    context.lineWidth=2*scale;
+    context.strokeRect(
+      x+1,
+      y+1,
+      photoWidth-2,
+      photoHeight-2
+    );
+  }
+
+  drawFooter(context,stripWidth,stripHeight,scale,frameTheme);
+
+  if(el.paperToggle.checked){
+    addPaperTexture(context,stripWidth,stripHeight);
+  }
+
+  context.strokeStyle=frameTheme.border;
+  context.lineWidth=3*scale;
+  context.strokeRect(
+    1.5*scale,
+    1.5*scale,
+    stripWidth-3*scale,
+    stripHeight-3*scale
+  );
+
+  return canvas.toDataURL("image/png");
+}
+
+async function renderLabPreview(){
+  clearTimeout(state.previewTimer);
+
+  const renderId=++state.previewRenderId;
+
+  state.previewTimer=setTimeout(async()=>{
+    try{
+      state.previewBusy=true;
+      el.finishButton.disabled=true;
+      el.labStrip.style.opacity=".58";
+      el.labStrip.style.filter="drop-shadow(0 24px 26px rgba(43,32,25,.23)) blur(.35px)";
+
+      const settings=currentSettings();
+      const previewURL=await buildStrip(settings,true);
+
+      // Ignore an older render that finished after a newer slider movement.
+      if(renderId!==state.previewRenderId)return;
+
+      state.labURL=previewURL;
+
+      await new Promise(resolve=>{
+        el.labStrip.onload=resolve;
+        el.labStrip.src=previewURL;
+      });
+
+      if(renderId!==state.previewRenderId)return;
+
+      el.labStrip.style.opacity="1";
+      el.labStrip.style.filter="drop-shadow(0 24px 26px rgba(43,32,25,.23))";
+      el.editStatus.textContent="preview updated";
+    }catch(error){
+      console.error(error);
+      showToast("The preview could not be rendered.");
+    }finally{
+      if(renderId===state.previewRenderId){
+        state.previewBusy=false;
+        el.finishButton.disabled=false;
+      }
+    }
+  },70);
+}
+
+function syncSliderOutputs(){
+  Object.values(sliders).forEach(item=>{
+    const value=Number(item.el.value);
+    item.out.value=value>0?`+${value}`:`${value}`;
+  });
+}
+
+function resetSliders(){
+  Object.values(sliders).forEach(item=>{
+    item.el.value=0;
+  });
+
+  syncSliderOutputs();
+
+  const preset=presets[state.preset];
+  el.dustToggle.checked=preset.dust;
+  el.halationToggle.checked=preset.halation;
+  el.lightLeakToggle.checked=preset.lightLeak;
+}
+
+function selectPreset(name){
+  state.preset=name;
+
+  $$(".filter-chip").forEach(button=>{
+    button.classList.toggle("active",button.dataset.preset===name);
+  });
+
+  resetSliders();
+  el.editStatus.textContent="applying preset...";
+  renderLabPreview();
+}
+
+async function finishStrip(){
+  el.finishButton.disabled=true;
+  el.finishButton.textContent="printing...";
+
+  try{
+    state.finalURL=await buildStrip(currentSettings(),false);
+    el.finalStrip.src=state.finalURL;
+
+    el.labScreen.classList.add("hidden");
+    el.resultScreen.classList.remove("hidden");
+
+    el.finalStrip.classList.remove("printing");
+    void el.finalStrip.offsetWidth;
+    el.finalStrip.classList.add("printing");
+
+    printSound();
+  }catch(error){
+    console.error(error);
+    showToast("The final strip could not be printed.");
+  }finally{
+    el.finishButton.disabled=false;
+    el.finishButton.textContent="print strip";
+  }
+}
+
+function initializeAudio(){
+  if(state.audio)return;
+
+  const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+  if(AudioContextClass){
+    state.audio=new AudioContextClass();
+  }
+}
+
+function beep(frequency=440,duration=.1,volume=.05,delay=0){
+  if(!el.soundToggle.checked||!state.audio)return;
+
+  const context=state.audio;
+  const oscillator=context.createOscillator();
+  const gain=context.createGain();
+  const start=context.currentTime+delay;
+
+  oscillator.frequency.value=frequency;
+  gain.gain.setValueAtTime(volume,start);
+  gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+
+  oscillator.start(start);
+  oscillator.stop(start+duration);
+}
+
+function shutterSound(){
+  beep(120,.07,.07);
+  beep(900,.035,.035,.02);
+}
+
+function printSound(){
+  initializeAudio();
+  for(let index=0;index<6;index+=1){
+    beep(90+index*7,.08,.018,index*.11);
+  }
+}
+
+function resetCapture(){
+  if(state.busy)return;
+  state.photos=[];
+  renderProgress();
+  el.cameraHint.textContent=state.ready
+    ?`ready for ${state.count} frames`
+    :"allow camera access";
+}
+
+el.enterButton.addEventListener("click",async()=>{
+  el.heroScreen.classList.add("hidden");
+  el.cameraScreen.classList.remove("hidden");
+  await startCamera();
+});
+
+el.flipButton.addEventListener("click",async()=>{
+  if(state.busy)return;
+
+  state.facing=state.facing==="user"?"environment":"user";
+  el.camera.style.transform=state.facing==="user"?"scaleX(-1)":"none";
+
+  await startCamera();
+});
+
+el.shootButton.addEventListener("click",shootSequence);
+el.resetButton.addEventListener("click",resetCapture);
+
+$$(".segment button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    if(state.busy)return;
+
+    state.count=Number(button.dataset.count);
+
+    $$(".segment button").forEach(item=>{
+      item.classList.toggle("active",item===button);
+    });
+
+    resetCapture();
+  });
+});
+
+el.previewSelect.addEventListener("change",()=>{
+  el.camera.className=`preview-${el.previewSelect.value}`;
+});
+
+$$(".filter-chip").forEach(button=>{
+  button.addEventListener("click",()=>{
+    selectPreset(button.dataset.preset);
+  });
+});
+
+Object.values(sliders).forEach(item=>{
+  const update=()=>{
+    syncSliderOutputs();
+    el.editStatus.textContent="updating preview...";
+    renderLabPreview();
+  };
+
+  item.el.addEventListener("input",update);
+  item.el.addEventListener("change",update);
+});
+
+[
+  el.dustToggle,
+  el.halationToggle,
+  el.lightLeakToggle,
+  el.paperToggle
+].forEach(toggle=>{
+  toggle.addEventListener("change",renderLabPreview);
+});
+
+$$(".frame-swatch").forEach(button=>{
+  button.addEventListener("click",()=>{
+    state.frame=button.dataset.frame;
+
+    $$(".frame-swatch").forEach(item=>{
+      item.classList.toggle("active",item===button);
+    });
+
+    el.editStatus.textContent="changing frame...";
+    renderLabPreview();
+  });
+});
+
+el.resetAdjustmentsButton.addEventListener("click",()=>{
+  resetSliders();
+  renderLabPreview();
+});
+
+el.finishButton.addEventListener("click",finishStrip);
+
+el.retakeButton.addEventListener("click",async()=>{
+  el.labScreen.classList.add("hidden");
+  el.cameraScreen.classList.remove("hidden");
+
+  state.busy=false;
+  lockCamera(false);
+  resetCapture();
+
+  await startCamera();
+});
+
+el.backToLabButton.addEventListener("click",()=>{
+  el.resultScreen.classList.add("hidden");
+  el.labScreen.classList.remove("hidden");
+});
+
+el.saveButton.addEventListener("click",()=>{
+  if(!state.finalURL)return;
+
+  const link=document.createElement("a");
+  link.href=state.finalURL;
+  link.download=`little-booth-${new Date().toISOString().slice(0,10)}.png`;
+  link.click();
+
+  el.savedMessage.classList.add("on");
+  beep(520,.16,.04);
+  beep(680,.20,.035,.12);
+
+  setTimeout(()=>el.savedMessage.classList.remove("on"),2600);
+});
+
+el.homeButton.addEventListener("click",()=>{
+  el.resultScreen.classList.add("hidden");
+  el.heroScreen.classList.remove("hidden");
+
+  stopCamera();
+  state.busy=false;
+  state.photos=[];
+  state.finalURL="";
+  state.labURL="";
+  resetCapture();
+});
+
+el.themeButton.addEventListener("click",()=>{
+  document.body.style.filter=document.body.style.filter
+    ?""
+    :"contrast(.98) sepia(.06)";
+});
+
+window.addEventListener("beforeunload",stopCamera);
+
+syncSliderOutputs();
+resetSliders();
+renderProgress();
 </script>
 </body>
 </html>
